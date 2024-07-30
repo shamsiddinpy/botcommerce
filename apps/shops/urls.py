@@ -1,8 +1,8 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-
-from shops.views import CurrencyListAPIView, LanguageListAPIView, ShopCreateAPIView, CountryListAPIView, \
-    ShopCategoryListAPIView
+from shops.views import (CountryListAPIView, CurrencyListAPIView,
+                         LanguageListAPIView, ShopCategoryListAPIView,
+                         ShopCreateAPIView)
 
 router = DefaultRouter()
 router.register(r'shop', ShopCreateAPIView, basename='shop')

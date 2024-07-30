@@ -1,10 +1,9 @@
 from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
-
 from users.models import User
 
 

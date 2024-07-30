@@ -2,8 +2,8 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
-from django.db.models import CASCADE, RESTRICT, SET_NULL, TextChoices, ManyToManyField
-
+from django.db.models import (CASCADE, RESTRICT, SET_NULL, ManyToManyField,
+                              TextChoices)
 from shared.django.models import CreatedBaseModel
 from users.managers import CustomUserManager
 

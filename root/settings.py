@@ -191,7 +191,8 @@ SIMPLE_JWT = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Botcommerce',
-    'DESCRIPTION': "Bir necha marta bosish orqali mahsulotlar qo'shing, buyurtmalarni boshqaring, to'lovlar va yetkazib berish xizmatlarini birlashtiring",
+    'DESCRIPTION': "Bir necha marta bosish orqali mahsulotlar qo'shing, buyurtmalarni boshqaring, "
+                   "to'lovlar va yetkazib berish xizmatlarini birlashtiring",
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'SECURITY': [

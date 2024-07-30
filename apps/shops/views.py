@@ -4,10 +4,10 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
-from shops.models import Currency, Language, Shop, Country, ShopCategory
-from shops.serializer import CurrencyModelSerializer, LanguageModelSerializer, ShopModelSerializer, \
-    CountryModelSerializer, ShopCategoryModelSerializer
+from shops.models import Country, Currency, Language, Shop, ShopCategory
+from shops.serializer import (CountryModelSerializer, CurrencyModelSerializer,
+                              LanguageModelSerializer,
+                              ShopCategoryModelSerializer, ShopModelSerializer)
 
 
 # Create your views here.

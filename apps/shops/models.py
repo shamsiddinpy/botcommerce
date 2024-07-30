@@ -115,8 +115,8 @@ class Product(Model):
     name = models.CharField(max_length=255, verbose_name='Mahsulotning nomi')
     category = models.ForeignKey('shops.Category', CASCADE, related_name='products',
                                  verbose_name="Kategoriya")
-    full_price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Mahsulotning umumiy narxi")
-    purchase_price = models.DecimalField(max_digits=5, decimal_places=2,
+    full_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Mahsulotning umumiy narxi")
+    purchase_price = models.DecimalField(max_digits=10, decimal_places=2,
                                          verbose_name="Mahsulotning sotib olish narxi")
     description = models.TextField()
     quantity = models.PositiveIntegerField(default=0, verbose_name="Mahsulot soni")

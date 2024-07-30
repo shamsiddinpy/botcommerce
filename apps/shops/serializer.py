@@ -1,7 +1,6 @@
 from rest_framework.fields import CurrentUserDefault, HiddenField
 from rest_framework.serializers import ModelSerializer
-
-from shops.models import Shop, Currency, ShopCategory, Language, Country
+from shops.models import Country, Currency, Language, Shop, ShopCategory
 
 
 class ShopModelSerializer(ModelSerializer):

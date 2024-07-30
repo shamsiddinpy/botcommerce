@@ -2,7 +2,7 @@ mig:
 	python manage.py makemigrations
 	python manage.py migrate
 
-flak8:
+flak:
 	isort .
 	flake8 .
 

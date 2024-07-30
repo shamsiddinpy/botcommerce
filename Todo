@@ -11,18 +11,18 @@ Bajarilganlar
 
 
 TASK
-
-8. pytest drf
-9. django faker
-TASK
 11. CRUD shop (pagination va filterni ham etiborga olish)
 12. CRUD category (pagination va filterni ham etiborga olish)
 13. Alohida adminka userlar uchun (is_staff true qilish kerak)
 14. celery + verification (language bilan accept-language qarash kk headers da),
 
-Bugun
+Bugun:
+     1. CRUD shop (pagination va filterni ham etiborga olish)
+     2. multithreading, multiprocessing, async
 
-Documentation
+
+
+
 
 8. pytest drf
 9. django faker
