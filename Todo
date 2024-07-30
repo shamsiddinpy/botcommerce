@@ -1,0 +1,28 @@
+Bajarilganlar
+✅1. register, login, logout api + drf-spectacular
+✅2. fixtures yozish
+✅3. isort, flake8
+✅4. swagger Authorize
+✅5. oauth2 4 tani qilish
+✅6. country currency, shop-category
+✅7. (pochtaga boradigan shablon bir hil bolishi kk)
+✅10. django command yaratish, faker bilan (user,shop,category,product) ntadan (./manage.py faker  ma'lunot qo'shish)
+
+
+
+TASK
+
+8. pytest drf
+9. django faker
+TASK
+11. CRUD shop (pagination va filterni ham etiborga olish)
+12. CRUD category (pagination va filterni ham etiborga olish)
+13. Alohida adminka userlar uchun (is_staff true qilish kerak)
+14. celery + verification (language bilan accept-language qarash kk headers da),
+
+Bugun
+
+Documentation
+
+8. pytest drf
+9. django faker

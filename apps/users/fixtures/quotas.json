@@ -1,0 +1,112 @@
+[
+  {
+    "model": "users.Quotas",
+    "pk": 1,
+    "fields": {
+      "name": "Telegram do‘koni",
+      "description": "Telegram orqali savdo qilish imkoniyatini beruvchi do‘kon turi.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 2,
+    "fields": {
+      "name": "WhatsApp do‘koni",
+      "description": "WhatsApp orqali savdo qilish imkoniyatini beruvchi do‘kon turi.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 3,
+    "fields": {
+      "name": "Veb-do‘kon",
+      "description": "Internet orqali savdo qilish uchun yaratilgan veb platforma.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 4,
+    "fields": {
+      "name": "Mahsulotlar",
+      "description": "Savdo uchun mavjud bo‘lgan mahsulotlar ro‘yxati.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 5,
+    "fields": {
+      "name": "Analitika",
+      "description": "Savdo va foydalanish statistikasi, tahlillarini olish imkoniyati.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 6,
+    "fields": {
+      "name": "Buyurtmalar",
+      "description": "Mijozlar tomonidan berilgan buyurtmalarni boshqarish imkoniyati.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 7,
+    "fields": {
+      "name": "Administrator paneli",
+      "description": "Platformaning boshqaruv paneli, administratorlar uchun maxsus funktsiyalar.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 8,
+    "fields": {
+      "name": "Etkazib berish xizmatlari",
+      "description": "Mahsulotlarni mijozlarga yetkazib berish xizmatlarini boshqarish imkoniyati.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 9,
+    "fields": {
+      "name": "Mijozlarni qo‘llab-quvvatlash",
+      "description": "Mijozlarga yordam va qo‘llab-quvvatlash xizmatlari.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 10,
+    "fields": {
+      "name": "Qo‘shimcha xodimlar akkauntlari",
+      "description": "Qo‘shimcha xodimlar uchun akkauntlar yaratish imkoniyati.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.Quotas",
+    "pk": 11,
+    "fields": {
+      "name": "Veb-do'kon shaxsiy domeni",
+      "description": "Veb-do‘kon uchun maxsus domen nomi.",
+      "created_at": "2024-07-30T12:00:00Z",
+      "updated_at": "2024-07-30T12:00:00Z"
+    }
+  }
+]

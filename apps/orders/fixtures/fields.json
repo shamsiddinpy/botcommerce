@@ -1,0 +1,47 @@
+[
+  {
+    "model": "orders.Field",
+    "pk": 1,
+    "fields": {
+      "service": 1,
+      "label": "Field Label 1",
+      "name": "field_1",
+      "max_length": 255,
+      "required": true,
+      "type": "string",
+      "provider_labels": {
+        "label1": "Value1",
+        "label2": "Value2"
+      }
+    }
+  },
+  {
+    "model": "orders.Field",
+    "pk": 2,
+    "fields": {
+      "service": 2,
+      "label": "Field Label 2",
+      "name": "field_2",
+      "max_length": 100,
+      "required": false,
+      "type": "integer",
+      "provider_labels": null
+    }
+  },
+  {
+    "model": "orders.Field",
+    "pk": 3,
+    "fields": {
+      "service": 1,
+      "label": "Field Label 3",
+      "name": "field_3",
+      "max_length": 50,
+      "required": true,
+      "type": "text",
+      "provider_labels": {
+        "labelA": "ValueA",
+        "labelB": "ValueB"
+      }
+    }
+  }
+]
