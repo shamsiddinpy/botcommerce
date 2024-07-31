@@ -49,14 +49,14 @@ class Shop(CreatedBaseModel):  # ✅
         ACTIVE = 'active', 'Active'  # Faol
         IN_ACTIVE = 'inactive', 'Inactive'  # Faol emas
 
-    name = models.CharField("Do'kon nomi", max_length=255)
+    name = models.CharField("Do'kon nomi", max_length=55)
     phone = models.CharField("Biznes telefon raqami", max_length=50)
     phone_number = models.CharField("Telefon raqami", max_length=50)
 
     country = models.ForeignKey("shops.Country", CASCADE, verbose_name="Ro'yxatdan o'tgan davlat")
     languages = models.ManyToManyField("shops.Language", blank=True, verbose_name="Til")
     services = models.ManyToManyField('orders.Service', through='orders.ShopService')
-    category = models.ForeignKey("shops.ShopCategory", CASCADE, verbose_name="Kategoriyalar")
+    shop_category = models.ForeignKey("shops.ShopCategory", CASCADE, verbose_name="Kategoriyalar")
     status = models.CharField(max_length=8, choices=Status.choices, db_default=Status.ACTIVE)
     currency = models.ForeignKey("shops.Currency", CASCADE, verbose_name="Pul birligi")
     # plan = models.ForeignKey('users.Plan', CASCADE, related_name='shops')
@@ -76,10 +76,10 @@ class Shop(CreatedBaseModel):  # ✅
                                                db_default=False)
     is_popular_products_show = models.BooleanField("'Ommabop mahsulotlar' sahifasini ko'rsatish", default=False,
                                                    db_default=False)
-    attachments = GenericRelation('shops.Attachment', blank=True)
-    shop_logo = GenericRelation('shops.Attachment', blank=True)
-    favicon_image = GenericRelation('shops.Attachment', blank=True)
-    slider_images = GenericRelation('shops.Attachment', blank=True)
+    attachments = GenericRelation('shops.Attachment', object_id_field='recad_id', blank=True)
+    shop_logo = GenericRelation('shops.Attachment', object_id_field='recad_id', blank=True)
+    favicon_image = GenericRelation('shops.Attachment', object_id_field='recad_id', blank=True)
+    slider_images = GenericRelation('shops.Attachment', object_id_field='recad_id', blank=True)
 
 
 class Attachment(CreatedBaseModel):
@@ -102,7 +102,7 @@ class TemplateColor(Model):  # ✅
         return self.name
 
 
-class Product(Model):
+class Product(CreatedBaseModel):
     class StockStatus(TextChoices):
         INDEFINITE = 'indefinite', 'Indefinite'  # no aniq
         FIXED = 'fixed', 'Fixed'
@@ -116,7 +116,7 @@ class Product(Model):
     category = models.ForeignKey('shops.Category', CASCADE, related_name='products',
                                  verbose_name="Kategoriya")
     full_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Mahsulotning umumiy narxi")
-    purchase_price = models.DecimalField(max_digits=10, decimal_places=2,
+    purchase_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True,
                                          verbose_name="Mahsulotning sotib olish narxi")
     description = models.TextField()
     quantity = models.PositiveIntegerField(default=0, verbose_name="Mahsulot soni")
@@ -130,7 +130,7 @@ class Product(Model):
     quantity = models.IntegerField('mahsulot soni status indefinite bo`lganda chiqadi', db_default=0)
     unit = models.CharField(max_length=20, choices=Units.choices, verbose_name="Birligi")
     barcode = models.CharField(max_length=255, null=True, blank=True, verbose_name="Mahsulotning shtrix kodi")
-    vat_percent = models.IntegerField('QQS foizi', db_default=0)
+    vat_percent = models.IntegerField('QQS foizi', null=True, blank=True)
     position = models.IntegerField('sort order', db_default=1)
 
     length = models.IntegerField(blank=True, verbose_name="Mahsulotning uzunligi")
@@ -201,6 +201,8 @@ class AttributeVariant(Model):
 
 class Country(Model):
     name = models.CharField(max_length=255, verbose_name='davlatlar nomi')
+
+    # code = models.CharField(max_length=255, verbose_name='davlatlar kodi')
 
     def __str__(self):
         return self.title
