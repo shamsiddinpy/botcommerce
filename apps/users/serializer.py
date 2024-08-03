@@ -1,6 +1,8 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import CharField, ModelSerializer, Serializer
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+
 from users.models import User
 
 
@@ -52,5 +54,3 @@ class ForgotPasswordModelSerializer(Serializer):
 class ResetPasswordSerializer(Serializer):
     new_password = CharField(write_only=True, required=True)
     confirm_password = CharField(write_only=True, required=True)
-
-

@@ -19,7 +19,7 @@ class Category(Model):
     show_in_ecommerce = models.BooleanField("Web saytda ko'rsatish", db_default=False)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.INACTIVE)
     description = models.TextField(null=True, blank=True)
-    position = models.IntegerField(default=1)
+    position = models.IntegerField("pozitsiya", default=1)
     shop = models.ForeignKey('shops.Shop', CASCADE, related_name='categories_set')
     attachments = GenericRelation('shops.Attachment', blank=True)
 
@@ -76,16 +76,17 @@ class Shop(CreatedBaseModel):  # ✅
                                                db_default=False)
     is_popular_products_show = models.BooleanField("'Ommabop mahsulotlar' sahifasini ko'rsatish", default=False,
                                                    db_default=False)
-    attachments = GenericRelation('shops.Attachment', object_id_field='recad_id', blank=True)
-    shop_logo = GenericRelation('shops.Attachment', object_id_field='recad_id', blank=True)
-    favicon_image = GenericRelation('shops.Attachment', object_id_field='recad_id', blank=True)
-    slider_images = GenericRelation('shops.Attachment', object_id_field='recad_id', blank=True)
+    attachments = GenericRelation('shops.Attachment', 'record_id', blank=True)
+    shop_logo = GenericRelation('shops.Attachment', 'record_id', blank=True)
+    favicon_image = GenericRelation('shops.Attachment', 'record_id', blank=True)
+    slider_images = GenericRelation('shops.Attachment', 'record_id', blank=True)
 
 
 class Attachment(CreatedBaseModel):
-    content_type = models.ForeignKey('contenttypes.ContentType', CASCADE, null=True, blank=True)
-    object_id = models.PositiveIntegerField()
-    context_object = GenericForeignKey('content_type', 'object_id')
+    content_type = models.ForeignKey('contenttypes.ContentType', CASCADE, null=True, blank=True,
+                                     related_name='attachments')
+    record_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'record_id')
     key = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
 
@@ -201,11 +202,10 @@ class AttributeVariant(Model):
 
 class Country(Model):
     name = models.CharField(max_length=255, verbose_name='davlatlar nomi')
-
-    # code = models.CharField(max_length=255, verbose_name='davlatlar kodi')
+    code = models.CharField(max_length=255, verbose_name='davlatlar kodi')
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name = 'Davlat'

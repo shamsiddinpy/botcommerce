@@ -73,21 +73,15 @@ class LoginViewAPIView(APIView):
                             password=serializer.validated_data['password'])
         if user:
             token, created = Token.objects.get_or_create(user=user)
-            response = {
-                'token': token.key,
-            }
-            return Response(response, status=status.HTTP_200_OK)
+            return Response({'token': token.key}, status=status.HTTP_200_OK)
         return Response({"error": "Email yoki parol noto'g'ri."}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LogoutGenericAPIView(APIView):  # lagout ishlmaypdi
-    permission_classes = [IsAuthenticated, ]
-
+class LogoutAPIView(APIView):  # lagout ishlmaypdi
     def post(self, request):
         try:
             refresh_token = request.data["token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
+            refresh_token.delete()
             return Response({"detail": "Muvaffaqiyatli chiqish amalga oshirildi."}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": "Noto'g'ri token"}, status=status.HTTP_400_BAD_REQUEST)

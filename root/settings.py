@@ -189,25 +189,17 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": False,
 }
-
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Botcommerce',
+    'TITLE': 'Botcommerce.io',
     'DESCRIPTION': "Bir necha marta bosish orqali mahsulotlar qo'shing, buyurtmalarni boshqaring, "
                    "to'lovlar va yetkazib berish xizmatlarini birlashtiring",
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    'SECURITY': [
-        {'BearerAuth': []},
-    ],
-    'COMPONENT_SPLIT_REQUEST': True,
-    'USE_SESSION_AUTH': False,
-    'SECURITY_DEFINITIONS': {
-        'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-        }
-    }
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+    },
 }
 # LOGGING = {
 #     'version': 1,
