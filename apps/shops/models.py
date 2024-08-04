@@ -14,7 +14,7 @@ class Category(Model):
         INACTIVE = 'inactive', 'Inactive'  # harakatsz
 
     name = models.CharField(max_length=255)
-    emoji = models.CharField(max_length=255)
+    emoji = models.CharField(max_length=255, null=True, blank=True)
     parent = models.ForeignKey('self', CASCADE, null=True, blank=True, related_name='children')
     show_in_ecommerce = models.BooleanField("Web saytda ko'rsatish", db_default=False)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.INACTIVE)
@@ -59,7 +59,7 @@ class Shop(CreatedBaseModel):  # ✅
     shop_category = models.ForeignKey("shops.ShopCategory", CASCADE, verbose_name="Kategoriyalar")
     status = models.CharField(max_length=8, choices=Status.choices, db_default=Status.ACTIVE)
     currency = models.ForeignKey("shops.Currency", CASCADE, verbose_name="Pul birligi")
-    # plan = models.ForeignKey('users.Plan', CASCADE, related_name='shops')
+    plan = models.ForeignKey('users.Plan', CASCADE, related_name='shops')
     owner = models.ForeignKey('users.User', CASCADE, related_name='shops')
     lat = models.FloatField('Location lat', blank=True, null=True)
     lon = models.FloatField('Location lon', blank=True, null=True)

@@ -1,7 +1,10 @@
+from django.shortcuts import get_object_or_404
+from jsonschema import ValidationError
 from rest_framework.fields import CurrentUserDefault, HiddenField, SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
-from shops.models import Country, Currency, Language, Shop, ShopCategory, Category
+from shops.models import Country, Currency, Language, Shop, ShopCategory, Category, Product, Attachment
+from users.models import Plan, Quotas
 
 
 class DynamicFieldsModelSerializer(ModelSerializer):
@@ -22,6 +25,21 @@ class ShopCategoryModelSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class QuotasModelSerializer(ModelSerializer):
+    class Meta:
+        model = Quotas
+        fields = '__all__'
+
+
+class PlanModelSerializer(ModelSerializer):
+    quotas = QuotasModelSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Plan
+        fields = 'name', 'description', 'code', 'quotas'
+        read_only_fields = ['quotas']
+
+
 class ShopModelSerializer(ModelSerializer):
     owner = HiddenField(default=CurrentUserDefault())
 
@@ -29,8 +47,8 @@ class ShopModelSerializer(ModelSerializer):
         model = Shop
         fields = (
             'id', 'name', 'phone_number', 'shop_category', 'country', 'languages', 'currency', 'owner', 'country',
-            "created_at", 'status', 'about_us')
-        read_only_fields = 'about_us', 'status'
+            "created_at", 'status', 'about_us', 'plan')
+        read_only_fields = 'about_us', 'status', 'plan',
 
     def to_representation(self, instance: Shop):
         data = super().to_representation(instance)
@@ -38,7 +56,17 @@ class ShopModelSerializer(ModelSerializer):
         data['shop_category'] = instance.shop_category.name
         data['shop_currency_id'] = instance.currency.id
         data['has_terminal'] = instance.has_terminal
+        data['plan'] = PlanModelSerializer(instance.plan).data
         return data
+
+    def create(self, data):
+        languages = data.pop('languages', [])
+        plan = data.pop('plan', None)
+        if not plan:
+            plan = get_object_or_404(Plan, code='Free')
+        shop = Shop.objects.create(**data, plan=plan)
+        shop.languages.set(languages)
+        return shop
 
 
 class CurrencyModelSerializer(ModelSerializer):
@@ -59,9 +87,16 @@ class CountryModelSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class AttachmentDynamicFieldsModelSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Attachment
+        fields = 'content_type', 'record_id', 'key', 'url'
+
+
 class CategoryModelSerializer(DynamicFieldsModelSerializer):
-    parent = SerializerMethodField()
     owner = HiddenField(default=CurrentUserDefault())
+    parent = Category.objects.all().first()
+    attachments = AttachmentDynamicFieldsModelSerializer(read_only=True, many=True)
 
     class Meta:
         model = Category
@@ -82,3 +117,10 @@ class CategoryModelSerializer(DynamicFieldsModelSerializer):
         cate['show_in_ecommerce'] = instance.show_in_ecommerce
         cate['parent'] = self.get_parent(instance)
         return cate
+
+    def validate(self, data):
+        shop_id = self.context.get('shop_id')
+        if data.get('parent'):
+            if data['parent'].shop_id != int(shop_id):
+                raise ValidationError({"parent": "Kategoriya boshqa do'konga tegishli"})
+        return data

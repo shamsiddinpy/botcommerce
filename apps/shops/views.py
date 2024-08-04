@@ -1,7 +1,9 @@
+from django.contrib.admin import action
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView, GenericAPIView, UpdateAPIView, CreateAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -45,38 +47,31 @@ class ShopCategoryListAPIView(ListAPIView):
     serializer_class = ShopCategoryModelSerializer
 
 
+@extend_schema(tags=['Currency'])
 class CurrencyListAPIView(ListAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencyModelSerializer
     pagination_class = None
 
 
+@extend_schema(tags=['Language'])
 class LanguageListAPIView(ListAPIView):
     queryset = Language.objects.all()
     serializer_class = LanguageModelSerializer
     pagination_class = None
 
 
+@extend_schema(tags=['Country'])
 class CountryListAPIView(ListAPIView):
     queryset = Country.objects.all()
     serializer_class = CountryModelSerializer
 
 
 @extend_schema(tags=['Category'])
-class CategoryCreateAPIView(ListAPIView):
+class CategoryCreateAPIView(ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
-    pagination_class = PageSortNumberPagination
-    permission_classes = [IsOwnerBasePermission]
+    pagination_class = None
 
     def get_queryset(self):
-        return super().get_queryset().filter(shop__owner=self.request.user)
-
-    def category(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return Shop.objects.filter(owner=self.request.user)

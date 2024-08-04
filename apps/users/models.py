@@ -3,7 +3,7 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.db.models import (CASCADE, RESTRICT, SET_NULL, ManyToManyField,
-                              TextChoices)
+                              TextChoices, Model)
 from shared.django.models import CreatedBaseModel
 from users.managers import CustomUserManager
 
@@ -73,11 +73,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
 
-class Plan(CreatedBaseModel):
+class Plan(Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(max_length=150)
     code = models.CharField(max_length=100, verbose_name='qaysi tarfidan foydalanyotgani')
-    quotas = ManyToManyField('users.Quotas')
+    quotas = ManyToManyField('users.Quotas', through='users.PlanQuotas', blank=True)
 
     def __str__(self):
         return f"{self.name} "

@@ -4,56 +4,35 @@
     "pk": 1,
     "fields": {
       "name": "Free Plan",
-      "description": "Basic Plan for new users.",
-      "code": "Free plan",
-      "quotas": [
-        1,
-        2,
-        3
-      ]
-    }
-  },
-  {
-    "model": "users.Plan",
-    "pk": 1,
-    "fields": {
-      "name": "Basic Plan",
-      "description": "Basic Plan for new users.",
-      "code": "Basic plan",
-      "quotas": [
-        1,
-        2,
-        3
-      ]
+      "description": "Free",
+      "code": "Free"
     }
   },
   {
     "model": "users.Plan",
     "pk": 2,
     "fields": {
-      "name": "Advanced Plan",
-      "description": "Advanced Plan with more features.",
-      "code": "advanced_Plan",
-      "quotas": [
-        4,
-        5,
-        6
-      ]
+      "name": "Basic Plan",
+      "description": "Basic",
+      "code": "Basic"
     }
   },
   {
     "model": "users.Plan",
     "pk": 3,
     "fields": {
+      "name": "Advanced Plan",
+      "description": "Advanced ",
+      "code": "Advanced"
+    }
+  },
+  {
+    "model": "users.Plan",
+    "pk": 4,
+    "fields": {
       "name": "Premium Plan",
-      "description": "Premium Plan with all features included.",
-      "code": "premium_Plan",
-      "quotas": [
-        7,
-        8,
-        9,
-        10
-      ]
+      "description": "Premium.",
+      "code": "Premium"
     }
   }
 ]

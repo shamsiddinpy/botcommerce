@@ -6,11 +6,13 @@ from shops.views import (CountryListAPIView, CurrencyListAPIView,
 
 router = DefaultRouter()
 router.register(r'shop', ShopModelViewSet, basename='shop')
+# router.register(r'category', CategoryCreateAPIView, basename='category')
+
 urlpatterns = [
     path('', include(router.urls)),
     path('currency', CurrencyListAPIView.as_view(), name='shop-currency-list'),
     path('language', LanguageListAPIView.as_view(), name='shop-language-list'),
     path('shop-country', CountryListAPIView.as_view(), name='shop-country-list'),
     path('shop-category', ShopCategoryListAPIView.as_view(), name='shop-category-list'),
-    path('category/<int:pk>', CategoryCreateAPIView.as_view(), name='shop-category-list'),
+    path('category/<int:shop_id>', CategoryCreateAPIView.as_view(), name='shop-category-list'),
 ]
