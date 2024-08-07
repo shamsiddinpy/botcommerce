@@ -104,6 +104,7 @@ class TemplateColor(Model):  # ✅
 
 
 class Product(CreatedBaseModel):
+
     class StockStatus(TextChoices):
         INDEFINITE = 'indefinite', 'Indefinite'  # no aniq
         FIXED = 'fixed', 'Fixed'

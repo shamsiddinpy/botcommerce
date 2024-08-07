@@ -3,7 +3,7 @@ from jsonschema import ValidationError
 from rest_framework.fields import CurrentUserDefault, HiddenField, SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
-from shops.models import Country, Currency, Language, Shop, ShopCategory, Category, Product, Attachment
+from shops.models import Country, Currency, Language, Shop, ShopCategory, Category, Attachment
 from users.models import Plan, Quotas
 
 
@@ -95,8 +95,6 @@ class AttachmentDynamicFieldsModelSerializer(DynamicFieldsModelSerializer):
 
 class CategoryModelSerializer(DynamicFieldsModelSerializer):
     owner = HiddenField(default=CurrentUserDefault())
-    parent = Category.objects.all().first()
-    attachments = AttachmentDynamicFieldsModelSerializer(read_only=True, many=True)
 
     class Meta:
         model = Category
@@ -104,23 +102,15 @@ class CategoryModelSerializer(DynamicFieldsModelSerializer):
                   'shop', 'attachments', 'owner')
         read_only_fields = 'show_in_ecommerce', 'status', 'shop'
 
-    def get_parent(self, instance):
-        if instance.parent:
-            return {
-                'id': instance.parent.id,
-                'name': instance.parent.name,
-            }
-        return {id: None, 'name': ''}
-
     def to_representation(self, instance: Category):
         cate = super().to_representation(instance)
         cate['show_in_ecommerce'] = instance.show_in_ecommerce
-        cate['parent'] = self.get_parent(instance)
+        cate['parent'] = instance.parent
         return cate
 
     def validate(self, data):
         shop_id = self.context.get('shop_id')
         if data.get('parent'):
-            if data['parent'].shop_id != int(shop_id):
+            if data['parent'].shop_id != shop_id:
                 raise ValidationError({"parent": "Kategoriya boshqa do'konga tegishli"})
         return data

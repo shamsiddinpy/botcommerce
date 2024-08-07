@@ -1,14 +1,10 @@
-from django.contrib.admin import action
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView, ListCreateAPIView, get_object_or_404
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from shared.django.pagination import PageSortNumberPagination
-from shared.django.permissions import IsOwnerBasePermission
 from shops.models import Country, Currency, Language, Shop, ShopCategory, Category
 from shops.serializer import (CountryModelSerializer, CurrencyModelSerializer,
                               LanguageModelSerializer,
@@ -74,4 +70,5 @@ class CategoryCreateAPIView(ListCreateAPIView):
     pagination_class = None
 
     def get_queryset(self):
-        return Shop.objects.filter(owner=self.request.user)
+        shop_id = self.kwargs['shop_id']
+        return Category.objects.filter(shop_id=shop_id)

@@ -14,5 +14,5 @@ urlpatterns = [
     path('language', LanguageListAPIView.as_view(), name='shop-language-list'),
     path('shop-country', CountryListAPIView.as_view(), name='shop-country-list'),
     path('shop-category', ShopCategoryListAPIView.as_view(), name='shop-category-list'),
-    path('category/<int:shop_id>', CategoryCreateAPIView.as_view(), name='shop-category-list'),
+    path('shop/<int:shop_id>/category', CategoryCreateAPIView.as_view(), name='shop-category-list'),
 ]

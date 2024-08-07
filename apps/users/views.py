@@ -7,10 +7,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import (CreateAPIView, GenericAPIView,
                                      get_object_or_404)
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
+
 from shared.utils.email_message import send_email, send_password_reset_email
 from users.models import User
 from users.serializer import (ForgotPasswordModelSerializer,
