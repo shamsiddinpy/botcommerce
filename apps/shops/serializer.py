@@ -1,22 +1,10 @@
 from django.shortcuts import get_object_or_404
-from jsonschema import ValidationError
-from rest_framework.fields import CurrentUserDefault, HiddenField, SerializerMethodField
+from rest_framework.fields import CurrentUserDefault, HiddenField
 from rest_framework.serializers import ModelSerializer
 
+from shared.django.permissions import DynamicFieldsModelSerializer
 from shops.models import Country, Currency, Language, Shop, ShopCategory, Category, Attachment
 from users.models import Plan, Quotas
-
-
-class DynamicFieldsModelSerializer(ModelSerializer):
-    def __init__(self, *args, **kwargs):
-        fields = kwargs.pop('fields', None)
-        super().__init__(*args, **kwargs)
-
-        if fields is not None:
-            allowed = set(fields)
-            existing = set(self.fields)
-            for field_name in existing - allowed:
-                self.fields.pop(field_name)
 
 
 class ShopCategoryModelSerializer(ModelSerializer):
@@ -87,30 +75,28 @@ class CountryModelSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class AttachmentDynamicFieldsModelSerializer(DynamicFieldsModelSerializer):
+class AttachmentModelSerializer(ModelSerializer):
     class Meta:
         model = Attachment
         fields = 'content_type', 'record_id', 'key', 'url'
 
 
 class CategoryModelSerializer(DynamicFieldsModelSerializer):
-    owner = HiddenField(default=CurrentUserDefault())
+    attachments = AttachmentModelSerializer(many=True, required=False)
 
     class Meta:
         model = Category
         fields = ('name', 'emoji', 'parent', 'show_in_ecommerce', 'status', 'description', 'position',
-                  'shop', 'attachments', 'owner')
+                  'shop', 'attachments')
         read_only_fields = 'show_in_ecommerce', 'status', 'shop'
+
+    def create(self, validated_data):
+        shop_id = self.context['view'].kwargs['shop_id']
+        category = Category.objects.create(shop_id=shop_id, **validated_data)
+        return category
 
     def to_representation(self, instance: Category):
         cate = super().to_representation(instance)
         cate['show_in_ecommerce'] = instance.show_in_ecommerce
         cate['parent'] = instance.parent
         return cate
-
-    def validate(self, data):
-        shop_id = self.context.get('shop_id')
-        if data.get('parent'):
-            if data['parent'].shop_id != shop_id:
-                raise ValidationError({"parent": "Kategoriya boshqa do'konga tegishli"})
-        return data

@@ -1,9 +1,10 @@
 from django.urls import path
-from rest_framework.routers import DefaultRouter
+
 from users.views import (ForgotPasswordView, LoginViewAPIView,
                          LogoutAPIView, RegisterViewCreateAPIView,
                          ResetPasswordView, UserActivateView)
 
+# app_nom = 'users'
 urlpatterns = [
 
     path('sign-up', RegisterViewCreateAPIView.as_view(), name='register'),
@@ -13,6 +14,3 @@ urlpatterns = [
     path('forgot-password', ForgotPasswordView.as_view(), name='forgot_password'),
     path('reset-password-message/<str:token>', ResetPasswordView.as_view(), name='reset_password_token', )
 ]
-
-router = DefaultRouter()
-# router.register('shop', ShopModelSerializer, basename='shop')

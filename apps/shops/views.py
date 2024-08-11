@@ -67,8 +67,15 @@ class CountryListAPIView(ListAPIView):
 class CategoryCreateAPIView(ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
-    pagination_class = None
+    pagination_class = PageSortNumberPagination
 
     def get_queryset(self):
         shop_id = self.kwargs['shop_id']
         return Category.objects.filter(shop_id=shop_id)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

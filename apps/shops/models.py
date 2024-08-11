@@ -21,7 +21,7 @@ class Category(Model):
     description = models.TextField(null=True, blank=True)
     position = models.IntegerField("pozitsiya", default=1)
     shop = models.ForeignKey('shops.Shop', CASCADE, related_name='categories_set')
-    attachments = GenericRelation('shops.Attachment', blank=True)
+    attachments = GenericRelation('shops.Attachment',"record_id", blank=True)
 
     # Rasm jpg, png, jpeg formatda bo'lsa shaffof ko'rinadi 1200x680 px
 
@@ -104,7 +104,6 @@ class TemplateColor(Model):  # ✅
 
 
 class Product(CreatedBaseModel):
-
     class StockStatus(TextChoices):
         INDEFINITE = 'indefinite', 'Indefinite'  # no aniq
         FIXED = 'fixed', 'Fixed'
@@ -126,10 +125,8 @@ class Product(CreatedBaseModel):
     packing_code = models.CharField(max_length=255, null=True, blank=True,
                                     verbose_name="Mahsulotning qadoqlash kodi")
     has_available = models.BooleanField(default=True, verbose_name="Mahsulotning o'ya sah")
-    ikpu_code = models.IntegerField('IKPU ko`di', null=True, blank=True)
     package_code = models.IntegerField('qadoq ko`di', null=True, blank=True)
     stock_status = models.CharField(max_length=100, choices=StockStatus.choices)
-    quantity = models.IntegerField('mahsulot soni status indefinite bo`lganda chiqadi', db_default=0)
     unit = models.CharField(max_length=20, choices=Units.choices, verbose_name="Birligi")
     barcode = models.CharField(max_length=255, null=True, blank=True, verbose_name="Mahsulotning shtrix kodi")
     vat_percent = models.IntegerField('QQS foizi', null=True, blank=True)
