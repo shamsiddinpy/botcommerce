@@ -147,7 +147,7 @@ class Service(Model):
     code = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=Type.choices)
     description = models.TextField(null=True, blank=True)
-    attachments = GenericRelation('shops.Attachment', blank=True)
+    attachments = GenericRelation('shops.Attachment', 'record_id', blank=True)
 
     class Meta:
         unique_together = [

@@ -3,7 +3,7 @@ from django.contrib.contenttypes.fields import (GenericForeignKey,
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import CASCADE, Model, TextChoices
-
+from django.core.files.storage import default_storage
 from apps.shared.django.models import CreatedBaseModel
 
 
@@ -21,7 +21,7 @@ class Category(Model):
     description = models.TextField(null=True, blank=True)
     position = models.IntegerField("pozitsiya", default=1)
     shop = models.ForeignKey('shops.Shop', CASCADE, related_name='categories_set')
-    attachments = GenericRelation('shops.Attachment',"record_id", blank=True)
+    attachments = GenericRelation('shops.Attachment', "record_id", blank=True)
 
     # Rasm jpg, png, jpeg formatda bo'lsa shaffof ko'rinadi 1200x680 px
 
@@ -142,7 +142,7 @@ class Product(CreatedBaseModel):
                                      blank=True, related_name='lengths')
     weight_class = models.ForeignKey('shops.Weight', CASCADE, verbose_name="Vazn birligi",
                                      blank=True, related_name='weights')
-    attachments = GenericRelation('shops.Attachment', blank=True)
+    attachments = GenericRelation('shops.Attachment', 'record_id', blank=True)
 
 
 class Length(Model):

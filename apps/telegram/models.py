@@ -77,7 +77,7 @@ class BroadCastMessage(Model):  # ✅
     status = models.CharField('Xabarning statusi', max_length=20, choices=MessageStatus.choices,
                               db_default=MessageStatus.PENDING)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Yaratilgan sana')
-    attachments = GenericRelation('shops.Attachment', blank=True)
+    attachments = GenericRelation('shops.Attachment', 'record_id', blank=True)
 
     class Meta:
         verbose_name = 'Axborotnoma'

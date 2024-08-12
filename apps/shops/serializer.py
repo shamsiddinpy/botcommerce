@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.fields import CurrentUserDefault, HiddenField
+from rest_framework.fields import CurrentUserDefault, HiddenField, SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
 from shared.django.permissions import DynamicFieldsModelSerializer
@@ -82,21 +82,27 @@ class AttachmentModelSerializer(ModelSerializer):
 
 
 class CategoryModelSerializer(DynamicFieldsModelSerializer):
-    attachments = AttachmentModelSerializer(many=True, required=False)
+    attachments = AttachmentModelSerializer(many=True, read_only=True)
 
     class Meta:
         model = Category
-        fields = ('name', 'emoji', 'parent', 'show_in_ecommerce', 'status', 'description', 'position',
+        fields = ('id', 'name', 'emoji', 'parent', 'show_in_ecommerce', 'status', 'description', 'position',
                   'shop', 'attachments')
-        read_only_fields = 'show_in_ecommerce', 'status', 'shop'
+        read_only_fields = ('show_in_ecommerce', 'status', 'shop', 'id')
 
     def create(self, validated_data):
         shop_id = self.context['view'].kwargs['shop_id']
         category = Category.objects.create(shop_id=shop_id, **validated_data)
         return category
 
+    def get_parent(self, instance):
+        if instance.parent_id:
+            return {"name": instance.parent.name}
+        return {'name': ''}
+
     def to_representation(self, instance: Category):
         cate = super().to_representation(instance)
+        cate['id'] = instance.id
         cate['show_in_ecommerce'] = instance.show_in_ecommerce
-        cate['parent'] = instance.parent
+        cate['parent'] = self.get_parent(instance)
         return cate
