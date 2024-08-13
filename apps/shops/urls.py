@@ -4,6 +4,7 @@ from shops.views import (CountryListAPIView, CurrencyListAPIView,
                          LanguageListAPIView, ShopCategoryListAPIView,
                          ShopModelViewSet, CategoryCreateAPIView)
 
+app_name = 'shop'
 router = DefaultRouter()
 router.register(r'shop', ShopModelViewSet, basename='shop')
 # router.register(r'category', CategoryCreateAPIView, basename='category')

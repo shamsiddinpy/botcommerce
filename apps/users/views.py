@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, get_user_model
 from django.core.cache import cache
 from django.shortcuts import redirect
 from django.utils.crypto import get_random_string
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
@@ -20,6 +21,7 @@ from users.serializer import (ForgotPasswordModelSerializer,
 User = get_user_model()
 
 
+@extend_schema(tags=['Authentication'])
 class RegisterViewCreateAPIView(CreateAPIView):
     serializer_class = UserSerializerModelSerializer
     queryset = User.objects.all()
@@ -46,6 +48,7 @@ class RegisterViewCreateAPIView(CreateAPIView):
         return Response(response, status=status.HTTP_201_CREATED)
 
 
+@extend_schema(tags=['Authentication'])
 class UserActivateView(APIView):
     permission_classes = (AllowAny,)
 
@@ -61,6 +64,7 @@ class UserActivateView(APIView):
         return Response({"error": "Havola noto'g'ri yoki muddati o'tgan."}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(tags=['Authentication'])
 class LoginViewAPIView(APIView):
     serializer_class = LoginModelSerializer
     permission_classes = (AllowAny,)
@@ -77,6 +81,7 @@ class LoginViewAPIView(APIView):
         return Response({"error": "Email yoki parol noto'g'ri."}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(tags=['Authentication'])
 class LogoutAPIView(APIView):  # lagout ishlmaypdi
     def post(self, request):
         try:
@@ -87,6 +92,7 @@ class LogoutAPIView(APIView):  # lagout ishlmaypdi
             return Response({"error": "Noto'g'ri token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(tags=['Authentication'])
 class ForgotPasswordView(APIView):
     permission_classes = (AllowAny,)
     serializer_class = ForgotPasswordModelSerializer
@@ -104,6 +110,7 @@ class ForgotPasswordView(APIView):
         return Response({"Message": "Parolni tiklash havolasi emailzga yubordik..!"}, status=status.HTTP_200_OK)
 
 
+@extend_schema(tags=['Authentication'])
 class ResetPasswordView(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ResetPasswordSerializer

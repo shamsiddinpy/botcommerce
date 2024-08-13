@@ -1,7 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import CharField, ModelSerializer, Serializer
-from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 from users.models import User
 

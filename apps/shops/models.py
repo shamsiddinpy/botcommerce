@@ -74,7 +74,7 @@ class Shop(CreatedBaseModel):  # ✅
     address = models.CharField('Manzil', max_length=500, null=True, blank=True)
     is_new_products_show = models.BooleanField("'Yangi mahsulotlar' sahifasini ko'rsatish", default=False,
                                                db_default=False)
-    is_popular_products_show = models.BooleanField("'Ommabop mahsulotlar' sahifasini ko'rsatish", default=False,
+    is_popular_products_show = models.BooleanField("Ommabop mahsulotlar' sahifasini ko'rsatish", default=False,
                                                    db_default=False)
     attachments = GenericRelation('shops.Attachment', 'record_id', blank=True)
     shop_logo = GenericRelation('shops.Attachment', 'record_id', blank=True)

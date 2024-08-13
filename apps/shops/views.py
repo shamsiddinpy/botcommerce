@@ -38,26 +38,27 @@ class ShopModelViewSet(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(tags=['Api'])
 class ShopCategoryListAPIView(ListAPIView):
     queryset = ShopCategory.objects.all()
     serializer_class = ShopCategoryModelSerializer
 
 
-@extend_schema(tags=['Currency'])
+@extend_schema(tags=['Api'])
 class CurrencyListAPIView(ListAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencyModelSerializer
     pagination_class = None
 
 
-@extend_schema(tags=['Language'])
+@extend_schema(tags=['Api'])
 class LanguageListAPIView(ListAPIView):
     queryset = Language.objects.all()
     serializer_class = LanguageModelSerializer
     pagination_class = None
 
 
-@extend_schema(tags=['Country'])
+@extend_schema(tags=['Api'])
 class CountryListAPIView(ListAPIView):
     queryset = Country.objects.all()
     serializer_class = CountryModelSerializer
