@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.fields import CurrentUserDefault, HiddenField, SerializerMethodField
+from rest_framework.fields import CurrentUserDefault, HiddenField
 from rest_framework.serializers import ModelSerializer
 
 from shared.django.permissions import DynamicFieldsModelSerializer
