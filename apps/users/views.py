@@ -11,7 +11,6 @@ from rest_framework.generics import (CreateAPIView, GenericAPIView,
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from shared.utils.email_message import send_email, send_password_reset_email
 from users.models import User
 from users.serializer import (ForgotPasswordModelSerializer,
@@ -61,7 +60,7 @@ class UserActivateView(APIView):
             cache.delete(token)
             user.save()
             return redirect('login')
-        return Response({"error": "Havola noto'g'ri yoki muddati o'tgan."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "The link is invalid or expired."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @extend_schema(tags=['Authentication'])
@@ -78,7 +77,7 @@ class LoginViewAPIView(APIView):
         if user:
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key}, status=status.HTTP_200_OK)
-        return Response({"error": "Email yoki parol noto'g'ri."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "Email or password is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @extend_schema(tags=['Authentication'])
@@ -87,9 +86,9 @@ class LogoutAPIView(APIView):  # lagout ishlmaypdi
         try:
             refresh_token = request.data["token"]
             refresh_token.delete()
-            return Response({"detail": "Muvaffaqiyatli chiqish amalga oshirildi."}, status=status.HTTP_200_OK)
+            return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"error": "Noto'g'ri token"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @extend_schema(tags=['Authentication'])
@@ -101,13 +100,13 @@ class ForgotPasswordView(APIView):
         email = request.data['email']
 
         if not email:
-            return Response({"message": f"Emailni kiriting..!!!"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": f"Enter email..!!!"}, status=status.HTTP_400_BAD_REQUEST)
 
         user = get_object_or_404(User, email=email)
         token = get_random_string(32)
         cache.set(token, user.email, 3600)
         send_password_reset_email(user.email, token)
-        return Response({"Message": "Parolni tiklash havolasi emailzga yubordik..!"}, status=status.HTTP_200_OK)
+        return Response({"Message": "We have sent a password reset link to your email..!!!"}, status=status.HTTP_200_OK)
 
 
 @extend_schema(tags=['Authentication'])
@@ -118,7 +117,7 @@ class ResetPasswordView(GenericAPIView):
     def post(self, request, token, *args, **kwargs):
         email = cache.get(token)
         if not email:
-            return Response({"errors": "Yangi barol qo'ying bir xil bo'lish kerak emas"})
+            return Response({"errors": "Put a new barol should not be the same"})
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             new_password = serializer.validated_data['new_password']

@@ -2,8 +2,8 @@ import random
 
 from django.core.management.base import BaseCommand, CommandError
 from faker import Faker
-
-from shops.models import (Category, Country, Currency, Shop, ShopCategory, Product)
+from shops.models import (Category, Country, Currency, Product, Shop,
+                          ShopCategory)
 from users.models import Plan, User
 
 

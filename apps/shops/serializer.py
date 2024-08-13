@@ -1,9 +1,9 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.fields import CurrentUserDefault, HiddenField
 from rest_framework.serializers import ModelSerializer
-
 from shared.django.permissions import DynamicFieldsModelSerializer
-from shops.models import Country, Currency, Language, Shop, ShopCategory, Category, Attachment
+from shops.models import (Attachment, Category, Country, Currency, Language,
+                          Shop, ShopCategory)
 from users.models import Plan, Quotas
 
 

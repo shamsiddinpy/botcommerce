@@ -1,8 +1,7 @@
 from django.urls import path
-
-from users.views import (ForgotPasswordView, LoginViewAPIView,
-                         LogoutAPIView, RegisterViewCreateAPIView,
-                         ResetPasswordView, UserActivateView)
+from users.views import (ForgotPasswordView, LoginViewAPIView, LogoutAPIView,
+                         RegisterViewCreateAPIView, ResetPasswordView,
+                         UserActivateView)
 
 # app_nom = 'users'
 urlpatterns = [

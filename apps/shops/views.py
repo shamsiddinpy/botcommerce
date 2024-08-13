@@ -1,15 +1,17 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.generics import ListAPIView, ListCreateAPIView, UpdateAPIView, DestroyAPIView, \
-    RetrieveDestroyAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (DestroyAPIView, ListAPIView,
+                                     ListCreateAPIView, RetrieveDestroyAPIView,
+                                     RetrieveUpdateDestroyAPIView,
+                                     UpdateAPIView)
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
 from shared.django.pagination import PageSortNumberPagination
-from shops.models import Country, Currency, Language, Shop, ShopCategory, Category
-from shops.serializer import (CountryModelSerializer, CurrencyModelSerializer,
-                              LanguageModelSerializer,
-                              ShopCategoryModelSerializer, ShopModelSerializer, CategoryModelSerializer)
+from shops.models import (Category, Country, Currency, Language, Shop,
+                          ShopCategory)
+from shops.serializer import (CategoryModelSerializer, CountryModelSerializer,
+                              CurrencyModelSerializer, LanguageModelSerializer,
+                              ShopCategoryModelSerializer, ShopModelSerializer)
 
 
 class ShopModelViewSet(ModelViewSet):
