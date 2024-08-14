@@ -1,11 +1,11 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.generics import (DestroyAPIView, ListAPIView,
-                                     ListCreateAPIView, RetrieveDestroyAPIView,
-                                     RetrieveUpdateDestroyAPIView,
-                                     UpdateAPIView)
+from rest_framework.filters import SearchFilter
+from rest_framework.generics import (ListAPIView,
+                                     ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
 from shared.django.pagination import PageSortNumberPagination
 from shops.models import (Category, Country, Currency, Language, Shop,
                           ShopCategory)
@@ -72,10 +72,16 @@ class CategoryCreateAPIView(ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
     pagination_class = PageSortNumberPagination
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
 
     def get_queryset(self):
         shop_id = self.kwargs['shop_id']
-        return Category.objects.filter(shop_id=shop_id)
+        queryset = Category.objects.filter(shop_id=shop_id)
+        name = self.request.query_params.get('search', None)
+        if name:
+            queryset = queryset.filter(name__contains=name)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
