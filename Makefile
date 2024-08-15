@@ -7,15 +7,13 @@ flak:
 	flake8 .
 
 load:
-	python manage.py loaddata service.json
-	python manage.py loaddata country.json
-	python manage.py loaddata currecny.json
-	python manage.py loaddata languages.json
-	python manage.py loaddata shop_category.json
-	python manage.py loaddata plan.json
-	python manage.py loaddata quotas.json
-
-
+	python manage.py loaddata service
+	python manage.py loaddata country
+	python manage.py loaddata currecny
+	python manage.py loaddata languages
+	python manage.py loaddata shop_category
+	python manage.py loaddata plan
+	python manage.py loaddata quotas
 
 jsonremove_migration:
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -not -path ".venv/*" -delete

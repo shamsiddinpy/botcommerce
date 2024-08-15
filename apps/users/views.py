@@ -1,18 +1,15 @@
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.shortcuts import redirect
-from django.utils.crypto import get_random_string
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.exceptions import ValidationError
 from rest_framework.generics import (CreateAPIView, GenericAPIView,
                                      get_object_or_404)
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from shared.utils.email_message import send_email, send_password_reset_email
 from users.models import User
 from users.serializer import (ForgotPasswordModelSerializer,
                               LoginModelSerializer, ResetPasswordSerializer,
@@ -27,26 +24,6 @@ class RegisterViewCreateAPIView(CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        try:
-            user = serializer.save()
-            token = get_random_string(32)
-            cache.set(token, user.email, 3600)
-            response = {
-                'id': user.id,
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'invitation_code': user.invitation_code,
-                'language': user.language,
-            }
-            send_email(user.email, token)
-        except ValidationError as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(response, status=status.HTTP_201_CREATED)
-
 
 @extend_schema(tags=['Authentication'])
 class UserActivateView(APIView):
@@ -60,36 +37,28 @@ class UserActivateView(APIView):
             user.public_offer = True
             cache.delete(token)
             user.save()
-            return redirect('login')
+            return redirect('users:login')
         return Response({"error": "The link is invalid or expired."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @extend_schema(tags=['Authentication'])
-class LoginViewAPIView(APIView):
+class LoginViewAPIView(GenericAPIView):
     serializer_class = LoginModelSerializer
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        user = authenticate(email=serializer.validated_data['email'],
-                            password=serializer.validated_data['password'])
-        if user:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
-        return Response({"error": "Email or password is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
 
 
 @extend_schema(tags=['Authentication'])
-class LogoutAPIView(APIView):  # lagout ishlmaypdi
+class LogoutAPIView(GenericAPIView):
     def post(self, request):
-        try:
-            refresh_token = request.data["token"]
-            refresh_token.delete()
-            return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+        request.user.auth_token.delete()
+        return Response({"message": "Muvaffaqiyatli chiqish amalga oshirildi"})
 
 
 @extend_schema(tags=['Authentication'])
@@ -98,16 +67,11 @@ class ForgotPasswordView(APIView):
     serializer_class = ForgotPasswordModelSerializer
 
     def post(self, request, *args, **kwargs):
-        email = request.data['email']
-
-        if not email:
-            return Response({"message": f"Enter email..!!!"}, status=status.HTTP_400_BAD_REQUEST)
-
-        user = get_object_or_404(User, email=email)
-        token = get_random_string(32)
-        cache.set(token, user.email, 3600)
-        send_password_reset_email(user.email, token)
-        return Response({"Message": "We have sent a password reset link to your email..!!!"}, status=status.HTTP_200_OK)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Biz sizning elektron pochtangizga parolni tiklash havolasini yubordik..!!!"})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @extend_schema(tags=['Authentication'])
@@ -117,15 +81,12 @@ class ResetPasswordView(GenericAPIView):
 
     def post(self, request, token, *args, **kwargs):
         email = cache.get(token)
-        if not email:
-            return Response({"errors": "Put a new barol should not be the same"})
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             new_password = serializer.validated_data['new_password']
-            if new_password:
-                user = get_object_or_404(User, email=email)
-                user.set_password(new_password)
-                cache.delete(token)
-                user.save()
-                return redirect('login')
+            user = get_object_or_404(User, email=email)
+            user.set_password(new_password)
+            user.save()
+            cache.delete(token)
+            return redirect('users:login')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

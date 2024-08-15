@@ -2,7 +2,8 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import (ListAPIView,
-                                     ListCreateAPIView, RetrieveUpdateDestroyAPIView)
+                                     ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView)
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -11,7 +12,7 @@ from shops.models import (Category, Country, Currency, Language, Shop,
                           ShopCategory)
 from shops.serializer import (CategoryModelSerializer, CountryModelSerializer,
                               CurrencyModelSerializer, LanguageModelSerializer,
-                              ShopCategoryModelSerializer, ShopModelSerializer)
+                              ShopCategoryModelSerializer, ShopModelSerializer, FileUploadSerializer)
 
 
 class ShopModelViewSet(ModelViewSet):
@@ -21,24 +22,6 @@ class ShopModelViewSet(ModelViewSet):
 
     def get_queryset(self):
         return super().get_queryset().filter(owner=self.request.user)
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def update(self, request, *args, **kwargs):
-        shop = self.get_object()
-        serializer = self.get_serializer(shop, data=self.request.data, partial=True, context={'request': self.request})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @extend_schema(tags=['Api'])
@@ -77,41 +60,29 @@ class CategoryCreateAPIView(ListCreateAPIView):
 
     def get_queryset(self):
         shop_id = self.kwargs['shop_id']
-        queryset = Category.objects.filter(shop_id=shop_id)
-        name = self.request.query_params.get('search', None)
-        if name:
-            queryset = queryset.filter(name__contains=name)
-        return queryset
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Category.objects.filter(shop_id=shop_id)
 
 
 @extend_schema(tags=['Category'])
 class CategoryUpdateAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = CategoryModelSerializer
     queryset = Category.objects.all()
+    pagination_class = PageSortNumberPagination
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        data = {
-            "count": 1,
-            "next": None,
-            "previous": None,
-            "results": [serializer.data],
-            "sort_fields": []
-        }
-        return Response(data)
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+@extend_schema(tags=['CategoryImport'])
+class CategoryImportAPIView(GenericAPIView):
+    serializer_class = FileUploadSerializer
+    permission_classes = AllowAny,
+
+    def post(self, request, *args, **kwargs):
+        from csv import DictReader
+        from io import TextIOWrapper
+        file = request.FILES['file']
+        rows = TextIOWrapper(file)
+        for row in DictReader(rows):
+            print(row)
+        if not file:
+            return Response({"error": "Fayl yuklanmadi."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"status": "Fayl muvaffaqiyatli yuklandi va qayta ishlanmoqda."},
+                        status=status.HTTP_201_CREATED)  # TODO YAXSHIROQ YO'LNI IZLASH

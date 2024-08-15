@@ -6,7 +6,7 @@ from users.views import (ForgotPasswordView, LoginViewAPIView, LogoutAPIView,
 app_name = 'users'
 urlpatterns = [
     path('sign-up', RegisterViewCreateAPIView.as_view(), name='register'),
-    path('sign-in', LoginViewAPIView.as_view(), name='login'),
+    path('login', LoginViewAPIView.as_view(), name='login'),
     path('logout', LogoutAPIView.as_view(), name='logout'),
     path('email-confirmation-message/<str:token>', UserActivateView.as_view(), name='activate-user'),
     path('forgot-password', ForgotPasswordView.as_view(), name='forgot-password'),

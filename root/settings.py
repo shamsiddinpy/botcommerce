@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework.authtoken',
-    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -95,7 +94,7 @@ WSGI_APPLICATION = 'root.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # TODO postgresqlga o'tqazish
         # 'NAME': os.environ.get('DB_NAME'),w
         # 'USER': os.environ.get('DB_USER'),
         # 'PASSWORD': os.environ.get('DB_PASSWORD'),
@@ -159,8 +158,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
 
     ],
-    'DEFAULT_SCHEMA_CLASS':
-        'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 
 }
@@ -169,8 +167,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = 'urunovsamariddin@gmail.com'
+EMAIL_HOST_PASSWORD = 'dsjxhcolhgqnqgyf'
 
 # CELERY_BROKER_URL = 'redis://localhost:6379'
 # CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
@@ -190,12 +188,14 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": False,
 }
+
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Botcommerce.io',
     'DESCRIPTION': "Bir necha marta bosish orqali mahsulotlar qo'shing, buyurtmalarni boshqaring, "
                    "to'lovlar va yetkazib berish xizmatlarini birlashtiring",
     'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
+    # 'SERVE_INCLUDE_SCHEMA': False,
     "SWAGGER_UI_SETTINGS": {
         "deepLinking": True,
         "persistAuthorization": True,
@@ -276,12 +276,12 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
     "language_chooser": True,
 }
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-MINIO_ACCESS_KEY = '2827W5B8RJ9jZHldQduA'
-MINIO_SECRET_KEY = 'nK4MkkVMGlsy478SLhf6HKeZrC96G3AHFfjRGVCh'
-MINIO_BUCKET_NAME = 'botcommerce'
-
-AWS_ACCESS_KEY_ID = '2827W5B8RJ9jZHldQduA'  # MINIO_ACCESS_KEY
-AWS_SECRET_ACCESS_KEY = 'nK4MkkVMGlsy478SLhf6HKeZrC96G3AHFfjRGVCh'  # MINIO_SECRET_KEY
-AWS_STORAGE_BUCKET_NAME = 'botcommerce'  # MINIO_BUCKET_NAME
-AWS_S3_ENDPOINT_URL = 'http://localhost:9000'  # Localhost
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# MINIO_ACCESS_KEY = '2827W5B8RJ9jZHldQduA'
+# MINIO_SECRET_KEY = 'nK4MkkVMGlsy478SLhf6HKeZrC96G3AHFfjRGVCh'
+# MINIO_BUCKET_NAME = 'botcommerce'
+#
+# AWS_ACCESS_KEY_ID = '2827W5B8RJ9jZHldQduA'  # MINIO_ACCESS_KEY
+# AWS_SECRET_ACCESS_KEY = 'nK4MkkVMGlsy478SLhf6HKeZrC96G3AHFfjRGVCh'  # MINIO_SECRET_KEY
+# AWS_STORAGE_BUCKET_NAME = 'botcommerce'  # MINIO_BUCKET_NAME
+# AWS_S3_ENDPOINT_URL = 'http://localhost:9000'  # Localhost
