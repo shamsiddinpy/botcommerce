@@ -1,9 +1,11 @@
+from csv import DictReader
+from io import TextIOWrapper
+
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import (ListAPIView,
-                                     ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView)
-from rest_framework.permissions import AllowAny
+                                     ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -71,18 +73,14 @@ class CategoryUpdateAPIView(RetrieveUpdateDestroyAPIView):
 
 
 @extend_schema(tags=['CategoryImport'])
-class CategoryImportAPIView(GenericAPIView):
+class CategoryImportAPIView(ListCreateAPIView):
     serializer_class = FileUploadSerializer
-    permission_classes = AllowAny,
 
     def post(self, request, *args, **kwargs):
-        from csv import DictReader
-        from io import TextIOWrapper
-        file = request.FILES['file']
+        file = request.FILES.get('file')
+        if not file:
+            return Response({"error": "No file was uploaded."}, status=status.HTTP_400_BAD_REQUEST)
         rows = TextIOWrapper(file)
         for row in DictReader(rows):
             print(row)
-        if not file:
-            return Response({"error": "Fayl yuklanmadi."}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"status": "Fayl muvaffaqiyatli yuklandi va qayta ishlanmoqda."},
-                        status=status.HTTP_201_CREATED)  # TODO YAXSHIROQ YO'LNI IZLASH
+        return Response({"status": "File uploaded and processed successfully."})

@@ -15,7 +15,7 @@ load:
 	python manage.py loaddata plan
 	python manage.py loaddata quotas
 
-jsonremove_migration:
+database:
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -not -path ".venv/*" -delete
 	find . -path "*/migrations/*.pyc"  -delete
 
