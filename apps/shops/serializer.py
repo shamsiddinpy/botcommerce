@@ -107,7 +107,7 @@ class CategoryModelSerializer(DynamicFieldsModelSerializer):
 
     def to_representation(self, instance: Category):
         cate = super().to_representation(instance)
-        cate['id'] = instance.ids
+        cate['id'] = instance.id
         cate['show_in_ecommerce'] = instance.show_in_ecommerce
         cate['parent'] = self.get_parent(instance)
         return cate

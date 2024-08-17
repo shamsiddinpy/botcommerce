@@ -1,10 +1,10 @@
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
-from shops.views import (CategoryCreateAPIView, CategoryUpdateAPIView,
-                         CountryListAPIView, CurrencyListAPIView,
-                         LanguageListAPIView, ShopCategoryListAPIView,
-                         ShopModelViewSet, CategoryImportAPIView)
+from shops.shops.views import (CategoryCreateAPIView, CategoryUpdateAPIView,
+                               CountryListAPIView, CurrencyListAPIView,
+                               LanguageListAPIView, ShopCategoryListAPIView,
+                               ShopModelViewSet, CategoryImportAPIView)
 
 app_name = 'shops'
 router = SimpleRouter(False)
