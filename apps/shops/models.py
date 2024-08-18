@@ -19,7 +19,7 @@ class Category(Model):
     show_in_ecommerce = models.BooleanField("Web saytda ko'rsatish", db_default=False)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.INACTIVE)
     description = models.TextField(null=True, blank=True)
-    position = models.IntegerField("pozitsiya", default=1)
+    position = models.IntegerField("tartiblash tartibi", default=1)
     shop = models.ForeignKey('shops.Shop', CASCADE, related_name='categories_set')
     attachments = GenericRelation('shops.Attachment', "record_id", blank=True)
 
