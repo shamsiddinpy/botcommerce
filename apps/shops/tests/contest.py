@@ -100,15 +100,17 @@ def test_create(self, client, shop, country, language, shop_category, currency, 
         'phone_number': '123456789',
         'languages': [language.id],
         'shop_category': shop_category.id,
-        'email': 'newshop@gmail.com',
+        'email': 'shamsiddin@gmail.com',
         'country': country.id,
         'currency': currency.id,
     }
     self.client.force_authenticate(user=user)
     response = client.post(url, data, format='json')
     assert response.status_code == status.HTTP_201_CREATED
-    shop = Shop.objects.get(id=response.data['id'])
+    shop = Shop.objects.last()
     assert shop.name == 'New Shop'
     assert shop.phone_number == '123456789'
+    assert shop.shop_category == shop_category.id
+    assert shop.email == 'shamsiddin@gmail.com'
     assert shop.country == country.id
     assert shop.currency == currency.id  # Todo qaytib kelman
