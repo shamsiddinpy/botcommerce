@@ -5,7 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from shared.django.pagination import PageSortNumberPagination
 from shops.models import (Country, Currency, Language, Shop,
                           ShopCategory)
-from shops.serializers.serializers_shop import (CountryModelSerializer,
+from shops.serializers.shop import (CountryModelSerializer,
                                                 CurrencyModelSerializer, LanguageModelSerializer,
                                                 ShopCategoryModelSerializer, ShopModelSerializer)
 
