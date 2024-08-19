@@ -53,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         TELEGRAM = 'telegram', 'Telegram'
         FACEBOOK = 'facebook', 'Facebook'
 
-    type = models.CharField(max_length=255)
+    type = models.CharField(max_length=255, choices=Type.choices)
     username = models.CharField('foydalanuvchini nomi', max_length=100, blank=True, null=True, unique=True,
                                 validators=[UnicodeUsernameValidator])
     email = models.EmailField(max_length=50, unique=True)
