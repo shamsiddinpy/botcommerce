@@ -107,7 +107,8 @@ def test_create(self, client, shop, country, language, shop_category, currency, 
     self.client.force_authenticate(user=user)
     response = client.post(url, data, format='json')
     assert response.status_code == status.HTTP_201_CREATED
-    assert Shop.objects.get().name == 'New Shop'
-    assert Shop.objects.get().phone_number == '123456789'
-    assert Shop.objects.get().country == country.id
-    assert Shop.objects.get().currency.id == currency.id  # Todo qaytib kelman
+    shop = Shop.objects.get(id=response.data['id'])
+    assert shop.name == 'New Shop'
+    assert shop.phone_number == '123456789'
+    assert shop.country == country.id
+    assert shop.currency == currency.id  # Todo qaytib kelman
