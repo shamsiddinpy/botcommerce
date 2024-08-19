@@ -167,9 +167,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'urunovsamariddin@gmail.com'
-EMAIL_HOST_PASSWORD = 'dsjxhcolhgqnqgyf'
+EMAIL_HOST_USER = 'dadturchi@gmail.com'
+EMAIL_HOST_PASSWORD = 'rfawomveapvtdtmq'
 
+# Enable logging for email sending
 # CELERY_BROKER_URL = 'redis://localhost:6379'
 # CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
 # CELERY_ACCEPT_CONTENT = ['application/json']
