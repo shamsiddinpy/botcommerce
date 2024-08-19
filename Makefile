@@ -24,7 +24,7 @@ database:
 	find . -path "*/migrations/*.pyc"  -delete
 
 
-#Keshini fayllarni tozalash:
+#Keshni fayllarni tozalash:
 test:
 	find . -name '__pycache__' -type d -exec rm -r {} +
 	find . -name '*.pyc' -delete

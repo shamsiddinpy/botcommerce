@@ -101,7 +101,7 @@ class Command(BaseCommand):
     def create_fake_categories(self, n, fake):
         shops = list(Shop.objects.all())
         if not shops:
-            raise CommandError('No shops found. Create shops first')
+            raise CommandError('No view found. Create view first')
 
         for _ in range(n):
             category = Category.objects.create(

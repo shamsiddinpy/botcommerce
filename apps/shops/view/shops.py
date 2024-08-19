@@ -10,6 +10,7 @@ from shops.serializers.serializers_shop import (CountryModelSerializer,
                                                 ShopCategoryModelSerializer, ShopModelSerializer)
 
 
+@extend_schema(tags=['shops'])
 class ShopModelViewSet(ModelViewSet):
     queryset = Shop.objects.all()
     serializer_class = ShopModelSerializer

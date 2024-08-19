@@ -94,7 +94,7 @@ def shop(self, country, language, shop_category, currency, plan, user, attachmen
 
 @pytest.fixture(scope='function')
 def test_create(self, client, shop, country, language, shop_category, currency, plan, user):
-    url = reverse('shops:shop-create')
+    url = reverse('view:shop-create')
     data = {
         'name': 'New Shop',
         'phone_number': '123456789',

@@ -23,7 +23,7 @@ class Category(Model):
     shop = models.ForeignKey('shops.Shop', CASCADE, related_name='categories_set')
     attachments = GenericRelation('shops.Attachment', "record_id", blank=True)
 
-    # Rasm jpg, png, jpeg formatda bo'lsa shaffof ko'rinadi 1200x680 px
+    # Rasm jpg, png, jpeg formatda bo'lsa s haffof ko'rinadi 1200x680 px
 
     def __str__(self):
         return self.name
@@ -59,8 +59,8 @@ class Shop(CreatedBaseModel):  # ✅
     shop_category = models.ForeignKey("shops.ShopCategory", CASCADE, verbose_name="Kategoriyalar")
     status = models.CharField(max_length=8, choices=Status.choices, db_default=Status.ACTIVE)
     currency = models.ForeignKey("shops.Currency", CASCADE, verbose_name="Pul birligi")
-    plan = models.ForeignKey('users.Plan', CASCADE, related_name='shops')
-    owner = models.ForeignKey('users.User', CASCADE, related_name='shops')
+    plan = models.ForeignKey('users.Plan', CASCADE, related_name='view')
+    owner = models.ForeignKey('users.User', CASCADE, related_name='view')
     lat = models.FloatField('Location lat', blank=True, null=True)
     lon = models.FloatField('Location lon', blank=True, null=True)
     starts_at = models.TimeField('Dan', blank=True, null=True)

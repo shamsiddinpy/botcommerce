@@ -1,8 +1,8 @@
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
-from shops.shops.categorys import CategoryCreateAPIView, CategoryUpdateAPIView, CategoryImportAPIView
-from shops.shops.shops import ShopModelViewSet, CurrencyListAPIView, LanguageListAPIView, CountryListAPIView, \
+from shops.view.categorys import CategoryCreateAPIView, CategoryUpdateAPIView, CategoryImportAPIView
+from shops.view.shops import ShopModelViewSet, CurrencyListAPIView, LanguageListAPIView, CountryListAPIView, \
     ShopCategoryListAPIView
 
 app_name = 'shops'
