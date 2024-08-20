@@ -6,8 +6,8 @@ from shared.django.pagination import PageSortNumberPagination
 from shops.models import (Country, Currency, Language, Shop,
                           ShopCategory)
 from shops.serializers.shop import (CountryModelSerializer,
-                                                CurrencyModelSerializer, LanguageModelSerializer,
-                                                ShopCategoryModelSerializer, ShopModelSerializer)
+                                    CurrencyModelSerializer, LanguageModelSerializer,
+                                    ShopCategoryModelSerializer, ShopModelSerializer)
 
 
 @extend_schema(tags=['shops'])
