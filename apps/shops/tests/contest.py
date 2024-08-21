@@ -2,7 +2,7 @@ import pytest
 from dotenv import load_dotenv
 from rest_framework.test import APIClient
 
-from shops.models import Country, Language, ShopCategory, Currency, Shop, Product, Category
+from shops.models import Country, ShopCategory, Currency, Shop, Product, Category
 from users.models import User, Plan
 
 load_dotenv()
@@ -65,7 +65,7 @@ def currency():
 
 @pytest.fixture(scope='function')
 def plan():
-    return Plan.objects.create(name='Free', description='Free dan foydalanyapsiz')
+    return Plan.objects.create(name='Free', code='free', description='Free dan foydalanyapsiz')
 
 
 @pytest.fixture(scope='function')
