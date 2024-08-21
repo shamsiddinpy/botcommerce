@@ -1,11 +1,8 @@
 import pytest
-from dotenv import load_dotenv
 from rest_framework.test import APIClient
 
 from shops.models import Country, ShopCategory, Currency, Shop, Product, Category
 from users.models import User, Plan
-
-load_dotenv()
 
 
 @pytest.fixture(scope='function')
@@ -72,8 +69,8 @@ def plan():
 def shop(user1, country, shop_category, currency, plan):
     shop = Shop.objects.create(
         name="Shop test",
-        phone="+998997711310",
-        phone_number=None,
+        phone="+998908840720",
+        phone_number='8989898',
         status="active",
         lat=7878700.12,
         lon=7878700.12,
@@ -84,12 +81,12 @@ def shop(user1, country, shop_category, currency, plan):
         facebook="https://facebook.com",
         instagram="https://instagram.com",
         telegram="https://telegram.com",
-        email="tohir@gmail.com",
-        address="Toshkent",
+        email="shamsiddin@gmail.com",
+        address="Toshkent sh",
         is_new_products_show=True,
         is_popular_products_show=True,
         country=country,
-        category=shop_category,
+        shop_category=shop_category,
         currency=currency,
         owner=user1,
         plan=plan,
@@ -102,8 +99,8 @@ def shop(user1, country, shop_category, currency, plan):
 def shop1(user1, country, shop_category, currency, plan):
     return Shop.objects.create(
         name="Shop test",
-        phone="+998997711310",
-        phone_number=None,
+        phone="+998908840720",
+        phone_number='8989898',
         status="active",
         lat=7878700.12,
         lon=7878700.12,
@@ -114,12 +111,12 @@ def shop1(user1, country, shop_category, currency, plan):
         facebook="https://facebook.com",
         instagram="https://instagram.com",
         telegram="https://telegram.com",
-        email="tohir@gmail.com",
-        address="Toshkent",
+        email="shamsiddin@gmail.com",
+        address="Toshkent sh",
         is_new_products_show=True,
         is_popular_products_show=True,
         country=country,
-        category=shop_category,
+        shop_category=shop_category,
         currency=currency,
         owner=user1,
         plan=plan,
@@ -130,8 +127,8 @@ def shop1(user1, country, shop_category, currency, plan):
 def shop2(user2, country, shop_category, currency, plan):
     shop2 = Shop.objects.create(
         name="Shop2 test",
-        phone="+998997711310",
-        phone_number=None,
+        phone="+998908840720",
+        phone_number='8989898',
         status="active",
         lat=7878700.12,
         lon=7878700.12,
@@ -142,12 +139,12 @@ def shop2(user2, country, shop_category, currency, plan):
         facebook="https://facebook.com",
         instagram="https://instagram.com",
         telegram="https://telegram.com",
-        email="tohir@gmail.com",
-        address="Toshkent",
+        email="shamsiddin@gmail.com",
+        address="Toshkent sh",
         is_new_products_show=True,
         is_popular_products_show=True,
         country=country,
-        category=shop_category,
+        shop_category=shop_category,
         currency=currency,
         owner=user2,
         plan=plan,

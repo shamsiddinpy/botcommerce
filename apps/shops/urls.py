@@ -8,9 +8,9 @@ from shops.view.shops import ShopModelViewSet, CurrencyListAPIView, LanguageList
 
 app_name = 'shops'
 router = SimpleRouter(False)
-router.register('shop', ShopModelViewSet, basename='shop')
+router.register(r'shop', ShopModelViewSet, basename='shop')
 # router.register(r'category', CategoryCreateAPIView, basename='category')
-router.register('product', ProductsViewSet, basename='product')
+router.register(r'product', ProductsViewSet, basename='product')
 
 urlpatterns = [
     path('currency', CurrencyListAPIView.as_view(), name='shop-currency-list'),
