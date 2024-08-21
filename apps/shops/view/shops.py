@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.generics import (ListAPIView)
 from rest_framework.viewsets import ModelViewSet
 
-from shared.django.pagination import PageSortNumberPagination
+from shared.restframework.paginations import PageSortNumberPagination
 from shops.models import (Country, Currency, Language, Shop,
                           ShopCategory)
 from shops.serializers.shop import (CountryModelSerializer,
@@ -24,6 +24,7 @@ class ShopModelViewSet(ModelViewSet):
 class ShopCategoryListAPIView(ListAPIView):
     queryset = ShopCategory.objects.all()
     serializer_class = ShopCategoryModelSerializer
+    pagination_class = None
 
 
 @extend_schema(tags=['Api'])

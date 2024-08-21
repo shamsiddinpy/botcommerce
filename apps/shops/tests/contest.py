@@ -1,116 +1,228 @@
 import pytest
-from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse
-from rest_framework import status
+from dotenv import load_dotenv
+from rest_framework.test import APIClient
 
-from shops.models import (Attachment, Country, Currency, Language, Shop,
-                          ShopCategory)
-from users.models import Plan, Quotas, User
+from shops.models import Country, Language, ShopCategory, Currency, Shop, Product, Category
+from users.models import User, Plan
 
-
-@pytest.fixture(scope='function')
-def language(self):
-    return Language.objects.create(title="Uzbek", code="en", icon="🇺🇿")
+load_dotenv()
 
 
 @pytest.fixture(scope='function')
-def country(self):
-    return Country.objects.create(code="UZ", name="Uzbekistan")
-
-
-@pytest.fixture(scope='function')
-def shop_category(self):
-    return ShopCategory.objects.create(name="Shop1")
-
-
-@pytest.fixture(scope='function')
-def currency(self):
-    return Currency.objects.create(name="UZS")
-
-
-@pytest.fixture(scope='function')
-def quotas(self):
-    quota1 = Quotas.objects.create(name="Quota 1", description="Description for quota 1")
-    quota2 = Quotas.objects.create(name="Quota 2", description="Description for quota 2")
-    return [quota1, quota2]
-
-
-@pytest.fixture(scope='function')
-def plan(self, quotas):
-    plans = Plan.objects.create(
-        name="Basic Plan", description="A basic plan", code="basic"
-    )
-    plans.quotas.set(quotas)
-    return plans
-
-
-@pytest.fixture(scope='function')
-def user(self):
-    return User.objects.create_user(email='shamsiddin@gmail.com', password="1")
-
-
-@pytest.fixture(scope='function')
-def attachment(self):
-    return Attachment.objects.create(
-        content_type=ContentType.objects.get_for_model(Shop),
-        record_id=1,
-        key='sample_attachment',
-        url='https://example.com/sample.jpg'
-    )
-
-
-@pytest.fixture(scope='function')
-def shop(self, country, language, shop_category, currency, plan, user, attachment):
-    shops = Shop.objects.create(
-        name="Test Shop",
-        phone='908840720',
-        phone_number='908840720',
-        country=country,
-        shop_category=shop_category,
-        currency=currency,
-        status=Shop.Status.ACTIVE,
-        plan=plan,
-        owner=user,
-        lat=40.7128,
-        lon=-74.0060,
-        starts_at='09:00',
-        ends_at='18:00',
-        has_terminal=True,
-        about_us='Biz haqimizda',
-        facebook='https://www.facebook.com/testshop',
-        instagram='https://www.instagram.com/testshop',
-        telegram='https://t.me/testshop',
-        email='shamsiddin@gmail.com',
-        address='Toshkent Sh',
-        is_new_products_show=True,
-        is_popular_products_show=True
-    )
-    shops.attachments.add(attachment)
-    shops.shop_logo.add(attachment)
-    shops.favicon_image.add(attachment)
-    shops.slider_images.add(attachment)
-    return shops  # Todo qaytib kelman
-
-
-@pytest.fixture(scope='function')
-def test_create(self, client, shop, country, language, shop_category, currency, plan, user):
-    url = reverse('view:shop-create')
+def user1():
     data = {
-        'name': 'New Shop',
-        'phone_number': '123456789',
-        'languages': [language.id],
-        'shop_category': shop_category.id,
         'email': 'shamsiddin@gmail.com',
-        'country': country.id,
-        'currency': currency.id,
+        'password': '1',
+        'is_active': True,
+        'is_superuser': True,
+        'is_staff': True,
+        'type': 'email'
     }
-    self.client.force_authenticate(user=user)
-    response = client.post(url, data, format='json')
-    assert response.status_code == status.HTTP_201_CREATED
-    shop = Shop.objects.last()
-    assert shop.name == 'New Shop'
-    assert shop.phone_number == '123456789'
-    assert shop.shop_category == shop_category.id
-    assert shop.email == 'shamsiddin@gmail.com'
-    assert shop.country == country.id
-    assert shop.currency == currency.id  # Todo qaytib kelman
+    return User.objects.create_user(**data)
+
+
+@pytest.fixture(scope='function')
+def user2():
+    data = {
+        'email': 'shamsiddin@gmail.com',
+        'password': '1',
+        'is_active': True,
+        'is_superuser': True,
+        'is_staff': True,
+        'type': 'email'
+    }
+    return User.objects.create_user(**data)
+
+
+@pytest.fixture(scope='function')
+def login_user1(user1):
+    api_client = APIClient()
+    api_client.force_authenticate(user1)
+    return api_client
+
+
+@pytest.fixture(scope='function')
+def login_user2(user2):
+    api_client = APIClient()
+    api_client.force_authenticate(user2)
+    return api_client
+
+
+@pytest.fixture(scope='function')
+def country():
+    return Country.objects.create(name='Uzbekistan', code='uz')
+
+
+@pytest.fixture(scope='function')
+def shop_category():
+    return ShopCategory.objects.create(name='Texnika')
+
+
+@pytest.fixture(scope='function')
+def currency():
+    return Currency.objects.create(name='Sum', order=1)
+
+
+@pytest.fixture(scope='function')
+def plan():
+    return Plan.objects.create(name='Free', description='Free dan foydalanyapsiz')
+
+
+@pytest.fixture(scope='function')
+def shop(user1, country, shop_category, currency, plan):
+    shop = Shop.objects.create(
+        name="Shop test",
+        phone="+998997711310",
+        phone_number=None,
+        status="active",
+        lat=7878700.12,
+        lon=7878700.12,
+        starts_at=None,
+        ends_at=None,
+        has_terminal=True,
+        about_us="Biz haqimizda malumot",
+        facebook="https://facebook.com",
+        instagram="https://instagram.com",
+        telegram="https://telegram.com",
+        email="tohir@gmail.com",
+        address="Toshkent",
+        is_new_products_show=True,
+        is_popular_products_show=True,
+        country=country,
+        category=shop_category,
+        currency=currency,
+        owner=user1,
+        plan=plan,
+    )
+    user1.default_shop = shop
+    return shop
+
+
+@pytest.fixture(scope='function')
+def shop1(user1, country, shop_category, currency, plan):
+    return Shop.objects.create(
+        name="Shop test",
+        phone="+998997711310",
+        phone_number=None,
+        status="active",
+        lat=7878700.12,
+        lon=7878700.12,
+        starts_at=None,
+        ends_at=None,
+        has_terminal=True,
+        about_us="Biz haqimizda malumot",
+        facebook="https://facebook.com",
+        instagram="https://instagram.com",
+        telegram="https://telegram.com",
+        email="tohir@gmail.com",
+        address="Toshkent",
+        is_new_products_show=True,
+        is_popular_products_show=True,
+        country=country,
+        category=shop_category,
+        currency=currency,
+        owner=user1,
+        plan=plan,
+    )
+
+
+@pytest.fixture(scope='function')
+def shop2(user2, country, shop_category, currency, plan):
+    shop2 = Shop.objects.create(
+        name="Shop2 test",
+        phone="+998997711310",
+        phone_number=None,
+        status="active",
+        lat=7878700.12,
+        lon=7878700.12,
+        starts_at=None,
+        ends_at=None,
+        has_terminal=True,
+        about_us="Biz haqimizda malumot",
+        facebook="https://facebook.com",
+        instagram="https://instagram.com",
+        telegram="https://telegram.com",
+        email="tohir@gmail.com",
+        address="Toshkent",
+        is_new_products_show=True,
+        is_popular_products_show=True,
+        country=country,
+        category=shop_category,
+        currency=currency,
+        owner=user2,
+        plan=plan,
+    )
+    user2.default_shop = shop2
+    return shop2
+
+
+@pytest.fixture(scope='function')
+def category(shop):
+    return Category.objects.create(
+        name='Texnika',
+        emoji='🤑',
+        position=2,
+        status='active',
+        shop=shop
+    )
+
+
+@pytest.fixture(scope='function')
+def category1(shop2):
+    return Category.objects.create(
+        name='Texnika',
+        emoji='🤑',
+        position=2,
+        status='active',
+        shop=shop2
+    )
+
+
+@pytest.fixture(scope='function')
+def category2(shop):
+    return Category.objects.create(
+        name='Iphone',
+        emoji='🤑',
+        position=2,
+        status='active',
+        shop=shop
+    )
+
+
+@pytest.fixture(scope='function')
+def product(category):
+    return Product.objects.create(
+        name='Product 1',
+        description='chotki',
+        category=category,
+        full_price=124,
+        price=12,
+        stock_status='fixed',
+        unit='item'
+    )
+
+
+@pytest.fixture(scope='function')
+def product1(category1):
+    return Product.objects.create(
+        name='Product 2',
+        description='chotki',
+        category=category1,
+        full_price=124,
+        price=12,
+        stock_status='fixed',
+        unit='item'
+    )
+
+
+@pytest.fixture(scope='function')
+def product2(category):
+    return Product.objects.create(
+        name='Mahsulot 1',
+        description='chotki',
+        category=category,
+        full_price=124,
+        price=12,
+        stock_status='fixed',
+        unit='item'
+    )

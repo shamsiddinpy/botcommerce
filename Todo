@@ -35,6 +35,16 @@ Bugun:
 
 
 
+1. shared utils ichida send_password_reset_email da localhost deb yozish xato, orniga request dan olish kk
+2. pytest
+url
+shop - list, create
+shop - retrieve, destroy, update, permission(boshqa userni shopini ozgartira olmasligi, ochirolmasligi, ololmasligi)
+
+
+category
+product
+
 
 Category:
     import
