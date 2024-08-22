@@ -9,7 +9,6 @@ from shops.view.shops import ShopModelViewSet, CurrencyListAPIView, LanguageList
 app_name = 'shops'
 router = SimpleRouter(False)
 router.register(r'shop', ShopModelViewSet, basename='shop')
-# router.register(r'category', CategoryCreateAPIView, basename='category')
 router.register(r'product', ProductsViewSet, basename='product')
 
 urlpatterns = [
@@ -19,9 +18,7 @@ urlpatterns = [
     path('shop-category', ShopCategoryListAPIView.as_view(), name='shop-category-list'),
     path('shop/<int:shop_id>/categories', CategoryCreateAPIView.as_view(), name='shop-categories'),
     path('shop/categories/<int:pk>', CategoryUpdateAPIView.as_view(), name='shop-category-update'),
-
     path('shop/s3-file-update', CategoryImportAPIView.as_view(), name='shop-s3-file-update'),
     path('', include(router.urls)),
 
 ]
-# https://api.botcommerce.io/api/v1/shop/shop/17593/s3-file-upload
