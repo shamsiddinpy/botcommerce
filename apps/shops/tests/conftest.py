@@ -82,7 +82,7 @@ def shop(user1, country, shop_category, currency, plan):
         instagram="https://instagram.com",
         telegram="https://telegram.com",
         email="shamsiddin@gmail.com",
-        address="Toshkent sh",
+        address="Tashkent sh",
         is_new_products_show=True,
         is_popular_products_show=True,
         country=country,
@@ -112,7 +112,7 @@ def shop1(user1, country, shop_category, currency, plan):
         instagram="https://instagram.com",
         telegram="https://telegram.com",
         email="shamsiddin@gmail.com",
-        address="Toshkent sh",
+        address="Tashkent sh",
         is_new_products_show=True,
         is_popular_products_show=True,
         country=country,
@@ -140,7 +140,7 @@ def shop2(user2, country, shop_category, currency, plan):
         instagram="https://instagram.com",
         telegram="https://telegram.com",
         email="shamsiddin@gmail.com",
-        address="Toshkent sh",
+        address="Tashkent sh",
         is_new_products_show=True,
         is_popular_products_show=True,
         country=country,
@@ -178,7 +178,7 @@ def category1(shop2):
 @pytest.fixture(scope='function')
 def category2(shop):
     return Category.objects.create(
-        name='Iphone',
+        name='Iphone 11 pro',
         emoji='🤑',
         position=2,
         status='active',
