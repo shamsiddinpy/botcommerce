@@ -8,7 +8,7 @@ from users.models import User, Plan
 @pytest.fixture(scope='function')
 def user1():
     data = {
-        'email': 'shamsiddin@gmail.com',
+        'email': 'user1@gmail.com',
         'password': '1',
         'is_active': True,
         'is_superuser': True,
@@ -21,7 +21,7 @@ def user1():
 @pytest.fixture(scope='function')
 def user2():
     data = {
-        'email': 'shamsiddin@gmail.com',
+        'email': 'user2@gmail.com',
         'password': '1',
         'is_active': True,
         'is_superuser': True,
@@ -52,7 +52,7 @@ def country():
 
 @pytest.fixture(scope='function')
 def shop_category():
-    return ShopCategory.objects.create(name='Texnika')
+    return ShopCategory.objects.create(name='Texnika1')
 
 
 @pytest.fixture(scope='function')

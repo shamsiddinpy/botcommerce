@@ -36,7 +36,7 @@ class ShopModelSerializer(ModelSerializer):
         fields = (
             'id', 'name', 'phone_number', 'shop_category', 'country', 'languages', 'currency', 'owner', 'country',
             "created_at", 'status', 'about_us', 'plan')
-        read_only_fields = 'about_us', 'status', 'plan',
+        read_only_fields = 'about_us', 'status',
 
     def to_representation(self, instance: Shop):
         data = super().to_representation(instance)
