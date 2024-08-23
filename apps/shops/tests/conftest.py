@@ -11,7 +11,7 @@ def user1():
         'email': 'user1@gmail.com',
         'password': '1',
         'is_active': True,
-        'is_superuser': True,
+        'is_superuser': False,
         'is_staff': True,
         'type': 'email'
     }
@@ -24,7 +24,7 @@ def user2():
         'email': 'user2@gmail.com',
         'password': '1',
         'is_active': True,
-        'is_superuser': True,
+        'is_superuser': False,
         'is_staff': True,
         'type': 'email'
     }
@@ -34,14 +34,14 @@ def user2():
 @pytest.fixture(scope='function')
 def login_user1(user1):
     api_client = APIClient()
-    api_client.force_authenticate(user1)
+    api_client.force_authenticate(user=user1)
     return api_client
 
 
 @pytest.fixture(scope='function')
 def login_user2(user2):
     api_client = APIClient()
-    api_client.force_authenticate(user2)
+    api_client.force_authenticate(user=user2)
     return api_client
 
 
