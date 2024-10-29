@@ -7,16 +7,9 @@ Bajarilganlar
 ✅6. country currency, shop-category
 ✅7. (pochtaga boradigan shablon bir hil bolishi kk)
 ✅10. django command yaratish, faker bilan (user,shop,category,product) ntadan (./manage.py faker  ma'lunot qo'shish)
-
-
-
-TASK
 11. CRUD shop (pagination va filterni ham etiborga olish)
 12. CRUD category (pagination va filterni ham etiborga olish)
 13. Alohida adminka userlar uchun (is_staff true qilish kerak)
-14. celery + verification (language bilan accept-language qarash kk headers da),
-
-Bugun:
      1. CRUD shop (pagination va filterni ham etiborga olish)
      2. multithreading, multiprocessing, async
 
@@ -28,14 +21,12 @@ Bugun:
 
 
 
-8. pytest drf
-9. django faker
-
-      "token": "ec968f59d83b274eaa9d63bf63ef72032c7a3a7e"
 
 
+14. celery + verification (language bilan accept-language qarash kk headers da),
 
-1. shared utils ichida send_password_reset_email da localhost deb yozish xato, orniga request dan olish kk
+
+1. shared utils ichida send_password_reset_email da localhost deb yozish xato, orniga request dan olish kk ✅
 2. pytest
 url
 shop - list, create
@@ -49,3 +40,16 @@ product
 Category:
     import
     attachment
+
+
+
+
+
+
+
+
+
+
+
+
+

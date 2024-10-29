@@ -39,9 +39,9 @@ class UserSerializerModelSerializer(ModelSerializer):
         user = super().save(**kwargs)
         token = get_random_string(32)
         cache.set(token, user.email, 3600)
-        send_email(user.email, token)
+        request = self.context.get('request')
         if request:
-            return request.data
+            send_email(request, user.email, token)
         return user
 
 
@@ -80,7 +80,10 @@ class ForgotPasswordModelSerializer(Serializer):
         user = User.objects.get(email=email)
         token = get_random_string(32)
         cache.set(token, user.email, 3600)
-        send_password_reset_email(user.email, token)
+        request = self.context.get('request')
+        if request:
+            send_password_reset_email(request, user.email, token)
+        return user
 
 
 class ResetPasswordSerializer(Serializer):
@@ -89,5 +92,5 @@ class ResetPasswordSerializer(Serializer):
 
     def validate(self, data):
         if data['new_password'] != data['confirm_password']:
-            raise ValidationError("Yangi parol va tasdiqlash paroli mos kelmaydi.")
+            raise ValidationError("r")
         return data
