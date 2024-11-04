@@ -11,5 +11,5 @@ class PageSortNumberPagination(PageNumberPagination):
             'previous': self.get_previous_link(),
             'results': data,
             'sort_fields': [],
-            'shop_logo': [],  # TODO
+            'shop_logo': [],  #TODO
         })

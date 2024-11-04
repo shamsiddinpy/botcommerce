@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
-from shops.view.categorys import CategoryCreateAPIView, CategoryUpdateAPIView, CategoryImportAPIView
+from shops.view.categorys import CategoryCreateAPIView, CategoryUpdateAPIView
 from shops.view.products import ProductsViewSet
 from shops.view.shops import ShopModelViewSet, CurrencyListAPIView, LanguageListAPIView, CountryListAPIView, \
     ShopCategoryListAPIView
@@ -18,7 +18,6 @@ urlpatterns = [
     path('shop-category', ShopCategoryListAPIView.as_view(), name='shop-category-list'),
     path('shop/<int:shop_id>/categories', CategoryCreateAPIView.as_view(), name='shop-categories'),
     path('shop/categories/<int:pk>', CategoryUpdateAPIView.as_view(), name='shop-category-update'),
-    path('shop/s3-file-update', CategoryImportAPIView.as_view(), name='shop-s3-file-update'),
     path('', include(router.urls)),
 
 ]

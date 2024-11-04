@@ -21,8 +21,11 @@ class Command(BaseCommand):
         # Create necessary objects first
         self.create_initial_objects(fake)
 
-        creators = {'user': self.create_fake_users, 'shop': self.create_fake_shops,
-                    'category': self.create_fake_categories}
+        creators = {'user': self.create_fake_users,
+                    'shop': self.create_fake_shops,
+                    'category': self.create_fake_categories,
+                    'product': self.create_faker_products
+                    }
         if model in creators:
             creators[model](n, fake)
         else:
@@ -116,7 +119,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'Created Category: {category.name}'))
 
     def create_faker_products(self, n, fake):
-        products = list(Product.objects.all())
         categories = list(Category.objects.all())
 
         if not categories:
