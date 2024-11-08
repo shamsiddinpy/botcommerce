@@ -2,7 +2,7 @@ from rest_framework.fields import FileField
 from rest_framework.serializers import Serializer
 
 from shared.restframework.serizlaizers import DynamicFieldsModelSerializer
-from shops.models import (Category)
+from shops.models import (Category, Attachment)
 from shops.serializers.shop import AttachmentModelSerializer
 
 
@@ -20,8 +20,12 @@ class CategoryModelSerializer(DynamicFieldsModelSerializer):  # Todo Categoryani
         read_only_fields = ('show_in_ecommerce', 'status', 'shop', 'id')
 
     def create(self, validated_data):
+        attachment_data = validated_data.pop('attachments', [])
+        validated_data['status'] = Category.Status.ACTIVE
         shop_id = self.context['view'].kwargs['shop_id']
         category = Category.objects.create(shop_id=shop_id, **validated_data)
+        for attachment in attachment_data:
+            Attachment.objects.create(category_object=category, **attachment)
         return category
 
     def get_parent(self, instance):

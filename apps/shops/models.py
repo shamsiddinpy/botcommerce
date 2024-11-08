@@ -17,7 +17,7 @@ class Category(Model):
     emoji = models.CharField(max_length=255, null=True, blank=True)
     parent = models.ForeignKey('self', CASCADE, null=True, blank=True, related_name='children')
     show_in_ecommerce = models.BooleanField("Web saytda ko'rsatish", db_default=False)
-    status = models.CharField(max_length=10, choices=Status.choices, default=Status.INACTIVE)
+    status = models.CharField('Holati', max_length=10, choices=Status.choices, default=Status.INACTIVE)
     description = models.TextField(null=True, blank=True)
     position = models.IntegerField("tartiblash tartibi", default=1)
     shop = models.ForeignKey('shops.Shop', CASCADE, related_name='categories_set')

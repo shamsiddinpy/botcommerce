@@ -102,4 +102,4 @@ class CountryModelSerializer(ModelSerializer):
 class AttachmentModelSerializer(ModelSerializer):
     class Meta:
         model = Attachment
-        fields = 'content_type', 'record_id', 'key', 'url'  # Todo Attachment Rasim yuklaydigan qilish
+        fields = 'id', 'record_id', 'key', 'url'  # Todo Attachment Rasim yuklaydigan qilish
