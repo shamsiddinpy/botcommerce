@@ -3,7 +3,6 @@ from rest_framework.response import Response
 
 
 class PageSortNumberPagination(PageNumberPagination):
-
     def get_paginated_response(self, data):
         return Response({
             'count': self.page.paginator.count,
@@ -11,5 +10,5 @@ class PageSortNumberPagination(PageNumberPagination):
             'previous': self.get_previous_link(),
             'results': data,
             'sort_fields': [],
-            'shop_logo': [],  #TODO
+            'shop_logo': [],  # TODO
         })
