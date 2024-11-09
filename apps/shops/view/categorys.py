@@ -1,14 +1,10 @@
-from django.contrib.contenttypes.models import ContentType
 from drf_spectacular.utils import extend_schema
-from rest_framework import status
+from drf_spectacular.utils import extend_schema
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import CreateAPIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from shared.restframework.paginations import PageSortNumberPagination
-from shops.models import (Category, Attachment)
+from shops.models import (Category)
 from shops.serializers.category import (CategoryModelSerializer)
 
 
