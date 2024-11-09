@@ -22,7 +22,7 @@ class Order(CreatedBaseModel):
         WHATSAPP = 'whatsapp', 'Whatsapp'
 
     class DeliveryType(TextChoices):
-        TAKE_AWAY = 'take away', 'Take away'  # Olib ketish
+        PICKUP = 'pickup', 'Pickup'  # Olib ketish
         DELIVERY = 'delivery', 'Delivery'  # yetkazib berish
         ONLINE_DELIVERY = 'online delivery', 'Online Delivery'  # onlyin yetkazib berish
 

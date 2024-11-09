@@ -3,7 +3,7 @@ import random
 from django.core.management.base import BaseCommand, CommandError
 from faker import Faker
 from shops.models import (Category, Country, Currency, Product, Shop,
-                          ShopCategory)
+                          ShopCategory, Length, Weight)
 from users.models import Plan, User
 
 
@@ -119,10 +119,26 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'Created Category: {category.name}'))
 
     def create_faker_products(self, n, fake):
+        help = "Soxta mahsulotlar qo'shish"
+
+        def add_base_argument(self, parser):
+            parser.add_argument('n', type=int, help=help)
+
+        def handler(self, *args, **options):
+            fake = Faker()
+            n = options['n']
+            self.create_initial_objects(fake)
+
         categories = list(Category.objects.all())
+        length_classes = list(Length.objects.all())
+        weight_classes = list(Weight.objects.all())
 
         if not categories:
-            raise CommandError('Kategoriya topilmadi')
+            raise CommandError('No view found. Create view first')
+        if not length_classes:
+            raise CommandError('No view found. Create view first')
+        if not weight_classes:
+            raise CommandError('No view found. Create view first')
 
         for _ in range(n):
             Product.objects.create(
@@ -136,7 +152,8 @@ class Command(BaseCommand):
                 packing_code=fake.word(),
                 has_available=fake.boolean(),
                 stock_status=random.choice(
-                    [Product.StockStatus.INDEFINITE, Product.StockStatus.FIXED, Product.StockStatus.NOT_AVAILABLE]),
+                    [Product.StockStatus.INDEFINITE, Product.StockStatus.FIXED, Product.StockStatus.NOT_AVAILABLE]
+                ),
                 unit=random.choice([Product.Units.ITEM, Product.Units.WEIGHT]),
                 barcode=fake.ean13(),
                 vat_percent=fake.random_int(min=0, max=25),
@@ -146,6 +163,7 @@ class Command(BaseCommand):
                 height=fake.random_int(min=1, max=100),
                 weight=fake.random_int(min=1, max=100),
                 internal_notes=fake.text(),
-                length_class=None,  # Agar length_class mavjud bo'lsa, uni moslashtiring
-                weight_class=None,  # Agar weight_class mavjud bo'lsa, uni moslashtiring
+                length_class=random.choice(length_classes),
+                weight_class=random.choice(weight_classes),
             )
+        self.stdout.write(self.style.SUCCESS(f'{n} ta mahsulot yaratildi.'))

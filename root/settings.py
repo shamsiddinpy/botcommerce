@@ -197,7 +197,7 @@ SPECTACULAR_SETTINGS = {
                    "to'lovlar va yetkazib berish xizmatlarini birlashtiring",
     'VERSION': '1.0.0',
     'COMPONENT_SPLIT_REQUEST': True,
-    # 'SERVE_INCLUDE_SCHEMA': False,
+    'SERVE_INCLUDE_SCHEMA': False,
     "SWAGGER_UI_SETTINGS": {
         "deepLinking": True,
         "persistAuthorization": True,

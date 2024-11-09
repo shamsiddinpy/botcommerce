@@ -41,10 +41,10 @@ class PlanPricingModelSerializer(ModelSerializer):
 
 
 class ShopModelSerializer(ModelSerializer):
-    owner = HiddenField(default=CurrentUserDefault())
-    languages = ListField(child=CharField(), write_only=True)
-    pricing = SerializerMethodField()
-    quotas = ListField(child=CharField(), write_only=True)
+    owner = HiddenField(default=CurrentUserDefault())  # Todo: Quotas qaytib kelaman
+    languages = ListField(child=CharField(), write_only=True)  # Todo: Quotas qaytib kelaman
+    pricing = SerializerMethodField()  # Todo: Quotas qaytib kelaman
+    quotas = ListField(child=CharField(), write_only=True)  # Todo: Quotas qaytib kelaman
 
     class Meta:
         model = Shop
@@ -55,9 +55,12 @@ class ShopModelSerializer(ModelSerializer):
 
     def to_representation(self, instance: Shop):
         data = super().to_representation(instance)
-        data['country'] = CountryModelSerializer(instance.country).data
-        data['shop_category'] = instance.shop_category.name
-        data['shop_currency_id'] = instance.currency.id
+        if instance.country:
+            data['country'] = CountryModelSerializer(instance.country).data
+        if instance.shop_category:
+            data['shop_category'] = instance.shop_category.name
+        if instance.shop_category_id:
+            data['shop_currency_id'] = instance.currency.id
         data['languages'] = [lang.code for lang in instance.languages.all()]
         data['has_terminal'] = instance.has_terminal
         data['plan'] = PlanModelSerializer(instance.plan).data
@@ -69,15 +72,18 @@ class ShopModelSerializer(ModelSerializer):
         return PlanPricingModelSerializer(pricing_qs, many=True).data
 
     def create(self, data):
+        quotas = data.pop('quotas', None)  # Todo: Corrected syntax
         languages = data.pop('languages', [])
         plan = data.pop('plan', None)
         if not plan:
             plan = get_object_or_404(Plan, code='Free')
         else:
             plan = get_object_or_404(Plan, code=plan)
-        language_instances = Language.objects.filter(code__in=languages)  # Todo qaytib kelamn
+
+        language_instances = Language.objects.filter(code__in=languages)  # Todo: return here if needed
         shop = Shop.objects.create(**data, plan=plan)
         shop.languages.set(language_instances)
+
         return shop
 
 

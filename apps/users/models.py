@@ -94,7 +94,7 @@ class PlanPricing(CreatedBaseModel):
     price = models.PositiveIntegerField('Narxi')
     original_price = models.PositiveIntegerField('Haqiqiy narxi')
     period = models.IntegerField('davr')
-    plan = models.ForeignKey('users.Plan', CASCADE, )
+    plan = models.ForeignKey('users.Plan', CASCADE,)
 
     def __str__(self):
         return f"{self.name}+{self.period_type}"
@@ -105,7 +105,7 @@ class Quotas(CreatedBaseModel):
     description = models.TextField('Kvotalar Tavsif')
 
     def __str__(self):
-        return f"{self.name} "
+        return f"{self.name}"
 
 
 class PlanQuotas(models.Model):
