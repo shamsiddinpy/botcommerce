@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from rest_framework.fields import FileField
 from rest_framework.serializers import Serializer
 
@@ -12,20 +13,30 @@ class FileUploadSerializer(Serializer):
 
 class CategoryModelSerializer(DynamicFieldsModelSerializer):  # Todo Categoryani ko'rish
     attachments = AttachmentModelSerializer(many=True, read_only=True)
+    file = FileUploadSerializer(many=True, required=True)
 
     class Meta:
         model = Category
         fields = ('id', 'name', 'emoji', 'parent', 'show_in_ecommerce', 'status', 'description', 'position',
-                  'shop', 'attachments')
-        read_only_fields = ('show_in_ecommerce', 'status', 'shop', 'id')
+                  'shop', 'attachments', 'file')
+        read_only_fields = ('show_in_ecommerce', 'status', 'shop', 'id', 'file')
 
     def create(self, validated_data):
         attachment_data = validated_data.pop('attachments', [])
         validated_data['status'] = Category.Status.ACTIVE
         shop_id = self.context['view'].kwargs['shop_id']
         category = Category.objects.create(shop_id=shop_id, **validated_data)
-        for attachment in attachment_data:
-            Attachment.objects.create(category_object=category, **attachment)
+        files = self.context.get('request').FILES.getlist('file')
+        for file in files:
+            key = f"shop/ecommerce/category/images/{category.id}/{file.name}"
+            url = f"https://fra1.digitaloceanspaces.com/botcommerce/{key}"
+            Attachment.objects.create(
+                content_type=ContentType.objects.get_for_model(Category),
+                record_id=category.id,
+                key=key,
+                url=url,
+
+            )
         return category
 
     def get_parent(self, instance):

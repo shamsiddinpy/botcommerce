@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
     # apps
     'shared',
     'orders',
@@ -278,12 +277,10 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
     # "language_chooser": True,
 }
-# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-# MINIO_ACCESS_KEY = '2827W5B8RJ9jZHldQduA'
-# MINIO_SECRET_KEY = 'nK4MkkVMGlsy478SLhf6HKeZrC96G3AHFfjRGVCh'
-# MINIO_BUCKET_NAME = 'botcommerce'
-#
-# AWS_ACCESS_KEY_ID = '2827W5B8RJ9jZHldQduA'  # MINIO_ACCESS_KEY
-# AWS_SECRET_ACCESS_KEY = 'nK4MkkVMGlsy478SLhf6HKeZrC96G3AHFfjRGVCh'  # MINIO_SECRET_KEY
-# AWS_STORAGE_BUCKET_NAME = 'botcommerce'  # MINIO_BUCKET_NAME
-# AWS_S3_ENDPOINT_URL = 'http://localhost:9000'  # Localhost
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL')
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_REGION_NAME = 'us-east-1'
