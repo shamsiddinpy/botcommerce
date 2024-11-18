@@ -81,6 +81,9 @@ class Shop(CreatedBaseModel):  # ✅
     favicon_image = GenericRelation('shops.Attachment', 'record_id', blank=True)
     slider_images = GenericRelation('shops.Attachment', 'record_id', blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Attachment(CreatedBaseModel):
     content_type = models.ForeignKey('contenttypes.ContentType', CASCADE, null=True, blank=True,

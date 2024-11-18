@@ -1,5 +1,6 @@
 from celery.bin.control import status
 from django.contrib.contenttypes.models import ContentType
+from django.http import FileResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
@@ -40,6 +41,25 @@ class CategoryAttachmentDeleteAPIView(APIView):
             attachment.delete()  # Ma'lumotlar bazasidan o'chadi
 
             return Response({"detail": "Attachment successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
+        except Category.DoesNotExist:
+            return Response({"error": "Category not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Attachment.DoesNotExist:
+            return Response({"error": "Attachment not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+@extend_schema(tags=['Category'])  # Rasimni yuklab olish (categoriyadagi rasimni yuklab olish kerak
+class DownloadCategoryImageAPIView(APIView):
+    def get(self, request, category_id, attachment_id):  # Todo buni ko'rish kerak rasimni yuklab olmaydpi
+        try:
+            category = Category.objects.get(id=category_id)
+            attachment = Attachment.objects.get(
+                content_type=ContentType.objects.get_for_model(Category),
+                record_id=category.id,
+                id=attachment_id
+            )
+            file_response = FileResponse(attachment.file.open(), attachment=True)
+            file_response['Content-Disposition'] = f'attachment; filename="{attachment.file.name.split("/")[-1]}"'
+            return file_response
         except Category.DoesNotExist:
             return Response({"error": "Category not found."}, status=status.HTTP_404_NOT_FOUND)
         except Attachment.DoesNotExist:
