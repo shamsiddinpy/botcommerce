@@ -89,6 +89,7 @@ class Attachment(CreatedBaseModel):
     content_object = GenericForeignKey('content_type', 'record_id')
     key = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
+    file = models.FileField(upload_to='attachment/', null=True, blank=True)
 
 
 class TemplateColor(Model):  # ✅
