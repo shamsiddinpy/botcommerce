@@ -91,6 +91,13 @@ class Attachment(CreatedBaseModel):
     url = models.URLField(null=True, blank=True)
     file = models.FileField(upload_to='attachment/', null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        if not self.key:
+            self.key = self.file.name
+        if not self.url:
+            self.url = self.file.url
+        super().save(*args, **kwargs)
+
 
 class TemplateColor(Model):  # ✅
     name = models.CharField(max_length=55, verbose_name='Nomi')
