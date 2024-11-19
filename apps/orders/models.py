@@ -49,13 +49,15 @@ class Order(CreatedBaseModel):
     floor_number = models.IntegerField('Qavat raqami', null=True, blank=True)
     address = models.CharField(blank=True, null=True, max_length=255, verbose_name='manzil')
     apartment_number = models.IntegerField('kvartera raqami', null=True, blank=True)
-
     lon = models.FloatField(null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
     first_name = models.CharField(blank=True, null=True, max_length=20)
     last_name = models.CharField(blank=True, null=True, max_length=20)
     email = models.EmailField(blank=True, null=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
 
 
 class PromoCode(Model):

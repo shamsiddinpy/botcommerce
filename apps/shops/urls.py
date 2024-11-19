@@ -17,7 +17,7 @@ urlpatterns = [
     path('shop-category', ShopCategoryListAPIView.as_view(), name='shop-category-list'),
     path('shop/<int:shop_id>/categories', CategoryCreateAPIView.as_view(), name='shop-categories'),
 
-    path('category/<int:category_id>/shop-file-upload/<int:attachment_id>', CategoryAttachmentDeleteAPIView.as_view(),
+    path('category/<int:category_id>/shop-file-upload', CategoryAttachmentDeleteAPIView.as_view(),
          name='shop-category-attachment-delete'),
     path('category/<int:category_id>/shop-file-upload/<int:attachment_id>', DownloadCategoryImageAPIView.as_view(),
          name='shop-category-attachment-download'),

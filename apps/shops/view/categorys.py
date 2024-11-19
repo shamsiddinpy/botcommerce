@@ -49,18 +49,11 @@ class CategoryAttachmentDeleteAPIView(APIView):
 
 @extend_schema(tags=['Category'])  # Rasimni yuklab olish (categoriyadagi rasimni yuklab olish kerak
 class DownloadCategoryImageAPIView(APIView):
-    def patch(self, request, category_id, attachment_id):  # Todo buni ko'rish kerak rasimni yuklab olmaydpi
+    def get(self, request, image_id):  # Todo buni ko'rish kerak rasimni yuklab olmaydpi
         try:
-            category = Category.objects.get(id=category_id)
-            attachment = Attachment.objects.get(
-                content_type=ContentType.objects.get_for_model(Category),
-                record_id=category.id,
-                id=attachment_id
-            )
-            file_response = FileResponse(attachment.file.open(), attachment=True)
+            attachment = Attachment.objects.get(id=image_id)
+            file_response = FileResponse(attachment.file.open(), content_type=attachment.content_type)
             file_response['Content-Disposition'] = f'attachment; filename="{attachment.file.name.split("/")[-1]}"'
-            return file_response
-        except Category.DoesNotExist:
-            return Response({"error": "Category not found."}, status=status.HTTP_404_NOT_FOUND)
+            return FileResponse(file_response)
         except Attachment.DoesNotExist:
-            return Response({"error": "Attachment not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Image not found.."}, status=status.HTTP_404_NOT_FOUND)
