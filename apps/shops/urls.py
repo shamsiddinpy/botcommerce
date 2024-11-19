@@ -19,7 +19,7 @@ urlpatterns = [
 
     path('category/<int:category_id>/shop-file-upload', CategoryAttachmentDeleteAPIView.as_view(),
          name='shop-category-attachment-delete'),
-    path('category/<int:category_id>/shop-file-upload/<int:attachment_id>', DownloadCategoryImageAPIView.as_view(),
+    path('category/<int:image_id>/shop-file-upload', DownloadCategoryImageAPIView.as_view(),
          name='shop-category-attachment-download'),
     path('', include(router.urls)),
 
