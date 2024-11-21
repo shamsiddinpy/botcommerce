@@ -49,6 +49,7 @@ class CategoryAttachmentDeleteAPIView(APIView):
 
 @extend_schema(tags=['Category'])  # Rasimni yuklab olish (categoriyadagi rasimni yuklab olish kerak
 class DownloadCategoryImageAPIView(APIView):
+
     def get(self, request, image_id):  # Todo buni ko'rish kerak rasimni yuklab olmaydpi
         try:
             attachment = Attachment.objects.get(id=image_id)
