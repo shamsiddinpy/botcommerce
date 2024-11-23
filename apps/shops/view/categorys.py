@@ -4,7 +4,7 @@ from django.http import FileResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, get_object_or_404
 from rest_framework.views import APIView
 
 from shared.restframework.paginations import PageSortNumberPagination
@@ -29,30 +29,29 @@ class CategoryCreateAPIView(CreateAPIView):
 class CategoryAttachmentDeleteAPIView(APIView):
 
     def delete(self, request, category_id, attachment_id):
+        category = get_object_or_404(Category, id=category_id)
+        content_type = ContentType.objects.get_for_model(Category)
+        attachment = get_object_or_404(
+            Attachment,
+            content_type=content_type,
+            record_id=category.id,
+            id=attachment_id,
+        )
         try:
-            category = Category.objects.get(id=category_id)
-            attachment = Attachment.objects.get(
-                content_type=ContentType.objects.get_for_model(Category),
-                record_id=category.id,
-                id=attachment_id
-            )
-            # Faylni o'chirish
-            attachment.file.delete(save=False)  # Fayl tizimdan o'chadi
-            attachment.delete()  # Ma'lumotlar bazasidan o'chadi
-
-            return Response({"detail": "Attachment successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
-        except Category.DoesNotExist:
-            return Response({"error": "Category not found."}, status=status.HTTP_404_NOT_FOUND)
-        except Attachment.DoesNotExist:
-            return Response({"error": "Attachment not found."}, status=status.HTTP_404_NOT_FOUND)
+            if attachment.file:
+                attachment.file.delete(save=False)
+        except Exception as e:
+            return Response({"error": f"Error deleting file: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        attachment.delete()
+        return Response({"detail": "Attachment successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
 @extend_schema(tags=['Category'])  # Rasimni yuklab olish (categoriyadagi rasimni yuklab olish kerak
 class DownloadCategoryImageAPIView(APIView):
 
-    def get(self, request, image_id):  # Todo buni ko'rish kerak rasimni yuklab olmaydpi
+    def get(self, request, attachment_id):  # Todo buni ko'rish kerak rasimni yuklab olmaydpi
         try:
-            attachment = Attachment.objects.get(id=image_id)
+            attachment = Attachment.objects.get(id=attachment_id)
             file_response = FileResponse(attachment.file.open(), content_type=attachment.content_type)
             file_response['Content-Disposition'] = f'attachment; filename="{attachment.file.name.split("/")[-1]}"'
             return FileResponse(file_response)
