@@ -59,30 +59,22 @@ class DownloadCategoryImageAPIView(APIView):
             return Response({"error": "Image not found.."}, HTTP_404_NOT_FOUND)
 
 
-@extend_schema(tags=['Category'])
+@extend_schema(tags=['Category'])  # Categoryni yanglish
 class UpdateCategoryImageAPIView(UpdateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
     pagination_class = PageSortNumberPagination
 
     def partial_update(self, request, *args, **kwargs):
-        # Get the category instance
         category = self.get_object()
-
-        # Get the file from the request
         file = request.FILES.get('file', None)
-
         if file:
-            # Create or retrieve an Attachment for the category
             attachment, created = Attachment.objects.get_or_create(
                 content_type=ContentType.objects.get_for_model(Category),
                 record_id=category.id,
                 defaults={'file': file}
             )
-
-            # If the attachment already exists, update its file
             if not created:
                 attachment.file = file
                 attachment.save()
-
         return super().partial_update(request, *args, **kwargs)
