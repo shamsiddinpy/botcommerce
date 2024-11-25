@@ -10,6 +10,7 @@ app_name = 'shops'
 router = SimpleRouter(False)
 router.register(r'shop', ShopModelViewSet, basename='shop')
 router.register(r'product', ProductsViewSet, basename='product')
+
 urlpatterns = [
     path('currency', CurrencyListAPIView.as_view(), name='shop-currency-list'),
     path('language', LanguageListAPIView.as_view(), name='shop-language-list'),

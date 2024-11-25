@@ -2,7 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import FileResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import CreateAPIView, get_object_or_404, ListCreateAPIView
+from rest_framework.generics import get_object_or_404, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
