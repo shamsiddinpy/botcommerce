@@ -2,7 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import FileResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import get_object_or_404, ListCreateAPIView
+from rest_framework.generics import get_object_or_404, ListCreateAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
@@ -57,3 +57,32 @@ class DownloadCategoryImageAPIView(APIView):
             return file_response
         except Attachment.DoesNotExist:
             return Response({"error": "Image not found.."}, HTTP_404_NOT_FOUND)
+
+
+@extend_schema(tags=['Category'])
+class UpdateCategoryImageAPIView(UpdateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryModelSerializer
+    pagination_class = PageSortNumberPagination
+
+    def partial_update(self, request, *args, **kwargs):
+        # Get the category instance
+        category = self.get_object()
+
+        # Get the file from the request
+        file = request.FILES.get('file', None)
+
+        if file:
+            # Create or retrieve an Attachment for the category
+            attachment, created = Attachment.objects.get_or_create(
+                content_type=ContentType.objects.get_for_model(Category),
+                record_id=category.id,
+                defaults={'file': file}
+            )
+
+            # If the attachment already exists, update its file
+            if not created:
+                attachment.file = file
+                attachment.save()
+
+        return super().partial_update(request, *args, **kwargs)
