@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
 from shops.view.categorys import CategoryCreateAPIView, CategoryAttachmentDeleteAPIView, DownloadCategoryImageAPIView, \
-    UpdateCategoryImageAPIView, ExportCategoryCSVAPIView, CategoryShopCategoryImportAPIView
+    UpdateCategoryImageAPIView
 from shops.view.products import ProductsViewSet
 from shops.view.shops import ShopModelViewSet, CurrencyListAPIView, LanguageListAPIView, CountryListAPIView, \
     ShopCategoryListAPIView
