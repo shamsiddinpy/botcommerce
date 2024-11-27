@@ -2,7 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 from django.http import FileResponse
 from drf_spectacular.utils import extend_schema
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.response import Response
@@ -11,7 +11,7 @@ from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_E
 from rest_framework.views import APIView
 
 from shared.restframework.paginations import PageSortNumberPagination
-from shops.models import (Category, Attachment)
+from shops.models import (Category, Attachment, Shop)
 from shops.serializers.category import (CategoryModelSerializer)
 
 
@@ -72,39 +72,19 @@ class CategoryDestroyAPIView(DestroyAPIView):
 
 @extend_schema(tags=['Category'])
 class CategoryPositionUpdateAPIView(APIView):
-    """
-    Kategoriyaning pozitsiyasini yangilash API.
-    """
-
-    def post(self, request, category_id, *args, **kwargs):
-        # Pozitsiya qiymatini so'rovdan olish
-        new_position = request.data.get('position')  # Yangilanish kerak bo'lgan pozitsiya
-        if new_position is None:
-            return Response(
-                {"error": "Pozitsiya qiymati yuborilmadi"},
-                status=HTTP_400_BAD_REQUEST
-            )
-
-        # Category modelini yangilash
-        with transaction.atomic():  # Barcha operatsiyalar atomik bo'lishi kerak
-            updated_count = Category.objects.filter(id=category_id).update(position=new_position)
-
-            if updated_count == 0:
-                return Response(
-                    {"error": f"Kategoriya ID: {category_id} mavjud emas."},
-                    status=HTTP_400_BAD_REQUEST
-                )
-
-        return Response(
-            {
-                "success": "Kategoriya pozitsiyasi muvaffaqiyatli yangilandi",
-                "category": {
-                    "id": category_id,
-                    "new_position": new_position,
-                },
-            },
-            status=HTTP_200_OK,
-        )
+    def patch(self, request, pk, shop_id, *args, **kwargs):
+        try:
+            shop = get_object_or_404(Shop, pk=shop_id)
+            category = Category.objects.get(pk=pk, shop=shop)
+            new_position = request.data.get('position')
+            if new_position is None:
+                raise ValidationError({'error': 'Position is required'})
+            Category.update_position(category.id, new_position)
+            return Response({'status': 'Position updated'}, status=200)
+        except Category.DoesNotExist:
+            return Response({'error': 'Category not found'}, status=404)
+        except ValidationError as e:
+            return Response(e.detail, status=400)
 
 
 @extend_schema(tags=['Category'])  # Rasimni yuklab olish (categoriyadagi rasimni yuklab olish kerak

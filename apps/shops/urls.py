@@ -25,7 +25,7 @@ urlpatterns = [
          name='shop-category-attachment-download'),
     path('shop/<int:pk>category', UpdateCategoryImageAPIView.as_view(), name='shop-category-update'),
     path('shop/<int:shop_id>/category/<int:pk>', CategoryDestroyAPIView.as_view(), name='shop-category-destroy'),
-    path('shop/category-position/<int:category_id>', CategoryPositionUpdateAPIView.as_view(), name='shop-category-position'),
+    path('shop/<int:shop_id>/category-position/<int:pk>', CategoryPositionUpdateAPIView.as_view(), name='shop-category-position'),
     # path('shop/<int:shop_id>/export', ExportCategoryCSVAPIView.as_view(), name='shop-category-attachment-export'),
     # Categorylarni export qiladigan API
     # path('shop/<int:shop_id>/import/category', CategoryShopCategoryImportAPIView.as_view(),

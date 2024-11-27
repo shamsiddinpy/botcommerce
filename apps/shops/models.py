@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.fields import (GenericForeignKey,
                                                 GenericRelation)
 from django.contrib.contenttypes.models import ContentType
-from django.db import models
+from django.db import models, transaction
 from django.db.models import CASCADE, Model, TextChoices
 
 from apps.shared.django.models import CreatedBaseModel
@@ -32,6 +32,27 @@ class Category(Model):
         verbose_name = 'Kategorya'
         verbose_name_plural = 'Kategorylar'
         ordering = ['position']
+
+    @classmethod
+    def update_position(cls, category_id, new_position):
+        try:
+            with transaction.atomic():
+                category = cls.objects.get(pk=category_id)
+                old_position = category.position
+
+                if new_position > old_position:
+                    cls.objects.filter(position__gt=category_id, position__lte=new_position).update(
+                        position=models.F('position') - 1)
+
+                elif new_position < old_position:
+                    cls.objects.filter(position__lt=old_position, position__gte=new_position).update(
+                        position=models.F('position') + 1
+
+                    )
+                category.position = new_position
+                category.save()
+        except cls.DoesNotExist:
+            raise ValueError("Category not found")
 
 
 class ShopCategory(Model):
