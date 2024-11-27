@@ -1,17 +1,15 @@
-import csv
-
 from django.contrib.contenttypes.models import ContentType
-from django.http import FileResponse, HttpResponse
+from django.http import FileResponse
 from drf_spectacular.utils import extend_schema
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import get_object_or_404, ListCreateAPIView, UpdateAPIView
+from rest_framework.generics import get_object_or_404, ListCreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_204_NO_CONTENT, \
-    HTTP_400_BAD_REQUEST, HTTP_201_CREATED, HTTP_403_FORBIDDEN
+from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 
 from shared.restframework.paginations import PageSortNumberPagination
-from shops.models import (Category, Attachment, ShopCategory, Shop)
+from shops.models import (Category, Attachment)
 from shops.serializers.category import (CategoryModelSerializer)
 
 
@@ -47,6 +45,27 @@ class CategoryAttachmentDeleteAPIView(APIView):
             return Response({"error": f"Error deleting file: {str(e)}"}, HTTP_500_INTERNAL_SERVER_ERROR)
         attachment.delete()
         return Response({"detail": "Attachment successfully deleted."}, HTTP_204_NO_CONTENT)
+
+
+@extend_schema(tags=['Category'])
+class CategoryDestroyAPIView(DestroyAPIView):
+    serializer_class = CategoryModelSerializer
+
+    def get_queryset(self):
+        """
+        Foydalanuvchining do'koniga tegishli kategoriyalarni filtrlaydi.
+        """
+        shop_id = self.kwargs.get('shop_id')
+        return Category.objects.filter(shop_id=shop_id)
+
+    def perform_destroy(self, instance):
+        """
+         Kategoriyani o'chirishdan oldin tekshiradi, faqat o'ziga tegishli shop'ga tegishli bo'lsa o'chiradi.
+        """
+        shop_id = self.kwargs.get('shop_id')
+        if instance.shop_id != shop_id:
+            raise PermissionDenied("You can only delete a category in your own store.")
+        return super().perform_destroy(instance)
 
 
 @extend_schema(tags=['Category'])  # Rasimni yuklab olish (categoriyadagi rasimni yuklab olish kerak
