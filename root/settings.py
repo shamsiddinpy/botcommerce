@@ -191,7 +191,7 @@ SIMPLE_JWT = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Botcommerce.io',
+    'TITLE': 'Shcommerce.io',
     'DESCRIPTION': "Bir necha marta bosish orqali mahsulotlar qo'shing, buyurtmalarni boshqaring, "
                    "to'lovlar va yetkazib berish xizmatlarini birlashtiring",
     'VERSION': '1.0.0',
@@ -226,9 +226,9 @@ SPECTACULAR_SETTINGS = {
 # }
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Botcommerce.io",
-    "site_header": "Botcommerce.io",
-    "site_brand": "Botcommerce.io",
+    "site_title": "Shcommerce.io",
+    "site_header": "Shcommerce.io",
+    "site_brand": "Shcommerce.io",
     "site_logo": "books/img/logo.png",
     "login_logo": None,
     "login_logo_dark": None,

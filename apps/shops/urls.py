@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
 from shops.view.categorys import CategoryCreateAPIView, CategoryAttachmentDeleteAPIView, DownloadCategoryImageAPIView, \
-    UpdateCategoryImageAPIView, CategoryDestroyAPIView
+    UpdateCategoryImageAPIView, CategoryDestroyAPIView, CategoryPositionAPIView
 from shops.view.products import ProductsViewSet
 from shops.view.shops import ShopModelViewSet, CurrencyListAPIView, LanguageListAPIView, CountryListAPIView, \
     ShopCategoryListAPIView
@@ -23,8 +23,9 @@ urlpatterns = [
          name='shop-category-attachment-delete'),
     path('category/<int:image_id>/shop-file-upload', DownloadCategoryImageAPIView.as_view(),
          name='shop-category-attachment-download'),
-    path('shop<int:pk>category', UpdateCategoryImageAPIView.as_view(), name='shop-category-update'),
-    path('shop<int:shop_id>/category/<int:pk>', CategoryDestroyAPIView.as_view(), name='shop-category-destroy'),
+    path('shop/<int:pk>category', UpdateCategoryImageAPIView.as_view(), name='shop-category-update'),
+    path('shop/<int:shop_id>/category/<int:pk>', CategoryDestroyAPIView.as_view(), name='shop-category-destroy'),
+    path('shop/<int:shop_id>/category-position/<int:position_id>', CategoryPositionAPIView.as_view(), name='shop-category-position'),
     # path('shop/<int:shop_id>/export', ExportCategoryCSVAPIView.as_view(), name='shop-category-attachment-export'),
     # Categorylarni export qiladigan API
     # path('shop/<int:shop_id>/import/category', CategoryShopCategoryImportAPIView.as_view(),

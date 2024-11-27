@@ -1,11 +1,13 @@
 from django.contrib.contenttypes.models import ContentType
+from django.db import transaction
 from django.http import FileResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_204_NO_CONTENT, \
+    HTTP_400_BAD_REQUEST, HTTP_200_OK
 from rest_framework.views import APIView
 
 from shared.restframework.paginations import PageSortNumberPagination
@@ -66,6 +68,50 @@ class CategoryDestroyAPIView(DestroyAPIView):
         if instance.shop_id != shop_id:
             raise PermissionDenied("You can only delete a category in your own store.")
         return super().perform_destroy(instance)
+
+
+@extend_schema(tags=['Category'])
+class CategoryPositionAPIView(APIView):
+    """
+    Kategoriyaning pozitsiyasini yangilovchi API.
+    """
+
+    def post(self, request, shop_id, position_id, *args, **kwargs):
+        """
+        Kategoriyaning pozitsiyasini yangilash.
+        """
+        new_position = request.data.get('position')
+        print(new_position)
+        if new_position is None:
+            return Response(
+                {"error": "Pozitsiya qiymati yuborilmadi"},
+                status=HTTP_400_BAD_REQUEST
+            )
+
+        with transaction.atomic():
+            updated_count = Category.objects.filter(
+                id=position_id, shop_id=shop_id
+            ).update(position=new_position)
+
+            if updated_count == 0:
+                return Response(
+                    {
+                        "error": f"Kategoriya ID: {position_id} ushbu shop ID: {shop_id}ga tegishli emas yoki mavjud emas."
+                    },
+                    status=HTTP_400_BAD_REQUEST
+                )
+
+        return Response(
+            {
+                "success": "Kategoriya pozitsiyasi muvaffaqiyatli yangilandi",
+                "category": {
+                    "id": position_id,
+                    "shop_id": shop_id,
+                    "new_position": new_position,
+                },
+            },
+            status=HTTP_200_OK,
+        )
 
 
 @extend_schema(tags=['Category'])  # Rasimni yuklab olish (categoriyadagi rasimni yuklab olish kerak

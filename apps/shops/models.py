@@ -31,6 +31,7 @@ class Category(Model):
     class Meta:
         verbose_name = 'Kategorya'
         verbose_name_plural = 'Kategorylar'
+        ordering = ['position']
 
 
 class ShopCategory(Model):
