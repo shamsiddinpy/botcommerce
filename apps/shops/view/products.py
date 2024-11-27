@@ -11,3 +11,5 @@ class ProductsListCreateAPIView(ListCreateAPIView):
     serializer_class = ProductModelSerializer
     pagination_class = PageSortNumberPagination
     queryset = Product.objects.all()
+
+

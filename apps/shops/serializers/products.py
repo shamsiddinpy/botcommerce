@@ -1,7 +1,6 @@
 from rest_framework.fields import SerializerMethodField, FileField, ListField
 from rest_framework.serializers import Serializer
 
-from shared.restframework.serizlaizers import DynamicFieldsModelSerializer
 from shops.models import Product
 from shops.serializers.shop import AttachmentModelSerializer
 
