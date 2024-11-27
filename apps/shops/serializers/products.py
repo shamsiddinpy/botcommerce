@@ -1,14 +1,15 @@
-from rest_framework.fields import SerializerMethodField, FileField
+from rest_framework.fields import SerializerMethodField, FileField, ListField
+from rest_framework.serializers import Serializer
 
 from shared.restframework.serizlaizers import DynamicFieldsModelSerializer
 from shops.models import Product
 from shops.serializers.shop import AttachmentModelSerializer
 
 
-class ProductModelSerializer(DynamicFieldsModelSerializer):
+class ProductModelSerializer(Serializer):
     position = SerializerMethodField(read_only=True)
     attachments = AttachmentModelSerializer(many=True, read_only=True)
-    file = FileField(write_only=True, required=False)
+    file = ListField(child=FileField(write_only=True, required=False))
 
     class Meta:
         model = Product
