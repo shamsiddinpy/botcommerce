@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from rest_framework.fields import FileField
+from rest_framework.fields import FileField, ListField
 
 from shared.restframework.serizlaizers import DynamicFieldsModelSerializer
 from shops.models import (Category, Attachment)
@@ -8,7 +8,10 @@ from shops.serializers.shop import AttachmentModelSerializer
 
 class CategoryModelSerializer(DynamicFieldsModelSerializer):  # Todo Categoryani ko'rish
     attachments = AttachmentModelSerializer(many=True, read_only=True)
-    file = FileField(write_only=True, required=False)
+    file = ListField(
+        child=FileField(write_only=True, required=False),
+        required=False
+    )
 
     class Meta:
         model = Category
@@ -21,7 +24,8 @@ class CategoryModelSerializer(DynamicFieldsModelSerializer):  # Todo Categoryani
         validated_data['status'] = Category.Status.ACTIVE
         shop_id = self.context['view'].kwargs['shop_id']
         category = Category.objects.create(shop_id=shop_id, **validated_data)
-        if file:
+        if isinstance(file, list):
+            file = file[0]
             Attachment.objects.create(content_type=ContentType.objects.get_for_model(Category),
                                       record_id=category.id, file=file)
         return category
