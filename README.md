@@ -1,4 +1,3 @@
-<img width="1440" alt="Screenshot 2024-08-04 at 13 29 38" src="https://github.com/user-attachments/assets/f6688fc3-dc57-4d10-9060-b88297b37731">5 daqiqada messenjerlarda do'kon yarating
 
 Bir necha marta bosish orqali mahsulotlar qo'shing, buyurtmalarni boshqaring, to'lovlar va yetkazib berish xizmatlarini birlashtiring
 
