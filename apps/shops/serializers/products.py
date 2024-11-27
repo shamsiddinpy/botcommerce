@@ -13,7 +13,8 @@ class ProductModelSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Product
         fields = ('name', 'description', 'category', 'full_price', 'purchase_price', 'unit', 'stock_status', 'position',
-                  'attachments', 'file')  # Todo Proudctlarni qilish
+                  'attachments', 'file', 'ikpu_code', 'packing_code', 'vat_percent', 'barcode', 'length', 'width',
+                  'weight', 'height', 'length_class', 'weight_class', 'internal_notes', '')  # Todo Proudctlarni qilish
         read_only_fields = ('file',)
 
     def get_position(self, obj):
