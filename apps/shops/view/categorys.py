@@ -71,33 +71,23 @@ class CategoryDestroyAPIView(DestroyAPIView):
 
 
 @extend_schema(tags=['Category'])
-class CategoryPositionAPIView(APIView):
-    """
-    Kategoriyaning pozitsiyasini yangilovchi API.
-    """
-
-    def post(self, request, shop_id, position_id, *args, **kwargs):
-        """
-        Kategoriyaning pozitsiyasini yangilash.
-        """
-        new_position = request.data.get('position')
-        print(new_position)
+class CategoryPositionUpdateAPIView(APIView):
+    def post(self, request, category_id, *args, **kwargs):
+        # Pozitsiya qiymatini so'rovdan olish
+        new_position = request.data.get('position')  # Yangilanish kerak bo'lgan pozitsiya
         if new_position is None:
             return Response(
                 {"error": "Pozitsiya qiymati yuborilmadi"},
                 status=HTTP_400_BAD_REQUEST
             )
 
-        with transaction.atomic():
-            updated_count = Category.objects.filter(
-                id=position_id, shop_id=shop_id
-            ).update(position=new_position)
+        # Category modelini yangilash
+        with transaction.atomic():  # Barcha operatsiyalar atomik bo'lishi kerak
+            updated_count = Category.objects.filter(id=category_id).update(position=new_position)
 
             if updated_count == 0:
                 return Response(
-                    {
-                        "error": f"Kategoriya ID: {position_id} ushbu shop ID: {shop_id}ga tegishli emas yoki mavjud emas."
-                    },
+                    {"error": f"Kategoriya ID: {category_id} mavjud emas."},
                     status=HTTP_400_BAD_REQUEST
                 )
 
@@ -105,8 +95,7 @@ class CategoryPositionAPIView(APIView):
             {
                 "success": "Kategoriya pozitsiyasi muvaffaqiyatli yangilandi",
                 "category": {
-                    "id": position_id,
-                    "shop_id": shop_id,
+                    "id": category_id,
                     "new_position": new_position,
                 },
             },
