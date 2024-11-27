@@ -72,6 +72,10 @@ class CategoryDestroyAPIView(DestroyAPIView):
 
 @extend_schema(tags=['Category'])
 class CategoryPositionUpdateAPIView(APIView):
+    """
+    Kategoriyaning pozitsiyasini yangilash API.
+    """
+
     def post(self, request, category_id, *args, **kwargs):
         # Pozitsiya qiymatini so'rovdan olish
         new_position = request.data.get('position')  # Yangilanish kerak bo'lgan pozitsiya
