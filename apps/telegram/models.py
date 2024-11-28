@@ -2,8 +2,10 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models import CASCADE, Model, TextChoices
 
+from shared.django.models import CreatedBaseModel
 
-class TelegramChannel(Model):  # ✅
+
+class TelegramChannel(CreatedBaseModel):  # ✅
     chat = models.CharField(max_length=255, verbose_name='Telegram kanal username')
     shop = models.ForeignKey('shops.Shop', CASCADE, related_name='channels')
 
@@ -18,7 +20,7 @@ class TelegramChannel(Model):  # ✅
         return f"{self.chat}"
 
 
-class ChannelMessage(Model):  # ✅
+class ChannelMessage(CreatedBaseModel):  # ✅
     class FileType(TextChoices):
         TEXT = 'text', 'Text'
         PHOTO = 'photo', 'Photo'
@@ -46,7 +48,7 @@ class ChannelMessage(Model):  # ✅
         return f"{self.id}. Message of {self.chat}"
 
 
-class ChatMessage(Model):  # ✅
+class ChatMessage(CreatedBaseModel):  # ✅
     class Type(TextChoices):
         USER = 'user', 'User'
         OWNER = 'owner', 'Owner'
@@ -61,7 +63,7 @@ class ChatMessage(Model):  # ✅
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Yaratilgan sana')
 
 
-class BroadCastMessage(Model):  # ✅
+class BroadCastMessage(CreatedBaseModel):  # ✅
     class MessageStatus(TextChoices):
         SENT = 'sent', 'Sent'
         PENDING = 'pending', 'Pending'
@@ -84,7 +86,7 @@ class BroadCastMessage(Model):  # ✅
         verbose_name_plural = 'Axborotnomalar'
 
 
-class Commerce(Model):  # ✅
+class Commerce(CreatedBaseModel):  # ✅
     class Status(TextChoices):
         ACTIVE = 'active', 'Active'
         INACTIVE = 'inactive', 'Inactive'
@@ -96,11 +98,17 @@ class Commerce(Model):  # ✅
     is_sub_domain = models.BooleanField(db_default=True, verbose_name='Sayt domen quygan yoki yuqligi')
     shop = models.OneToOneField('shops.Shop', CASCADE, related_name='sites')
 
+    def __str__(self):
+        return f"{self.name}"
 
-class TelegramBot(Model):  # ✅
+
+class TelegramBot(CreatedBaseModel):  # ✅
     username = models.CharField(max_length=255, unique=True, verbose_name='Telegram username')
     token = models.CharField(max_length=255, unique=True, verbose_name='BotFather dan olingan token')
     group_access_token = models.CharField(max_length=255, unique=True, verbose_name='guruhda ishlashi uchun token')
     is_new_template = models.BooleanField(verbose_name='web app True odiiy bot False')
     order_button_url = models.CharField(max_length=255)
     shop = models.OneToOneField('shops.Shop', CASCADE, related_name='telegram_bots')
+
+    def __str__(self):
+        f"Bot: {self.username} ({self.shop.name})"
