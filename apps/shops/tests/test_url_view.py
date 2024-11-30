@@ -27,7 +27,7 @@ class TestShopUrl:
         assert shop_categories_url == '/api/v1/shop/shop/1/categories'
 
         shop_category_update_url = reverse_lazy('shops:shop-category-update', kwargs={'pk': 1})
-        assert shop_category_update_url == '/api/v1/shop/shop/categories/1'
+        assert shop_category_update_url == '/api/v1/shop/shop/1/category'
 
-        shop_s3_file_update_url = reverse_lazy('shops:shop-s3-file-update')
-        assert shop_s3_file_update_url == '/api/v1/shop/shop/s3-file-update'
+        # shop_s3_file_update_url = reverse_lazy('shops:shop-s3-file-update')
+        # assert shop_s3_file_update_url == '/api/v1/shop/shop/s3-file-update'

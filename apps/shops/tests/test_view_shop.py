@@ -4,12 +4,12 @@ from rest_framework import status
 
 from apps.shops.tests.conftest import shop, user1, country, currency, shop_category, login_user1
 
-pytestmark = pytest.mark.django_db
 
+# pytestmark = pytest.mark.django_db
 
+@pytest.mark.django_db
 class TestShopView:
-    @pytestmark
-    def test_create_shops(self, shop, plan, user1, country, currency, shop_category, api_client, login_user1):
+    def test_create_shops(self, shop, plan, user1, country, currency, shop_category, client, login_user1):
         url = reverse_lazy('shops:shop-list')
         data = {
             "name": "Shop test",
@@ -33,7 +33,7 @@ class TestShopView:
             "currency": currency.id,
             "owner": user1.id,
         }
-        response = api_client.post(url, data)
+        response = client.post(url, data)
         assert response.status_code == 201
         response_data = response.data
         assert response_data['name'] == data['name']
@@ -44,10 +44,9 @@ class TestShopView:
         assert response_data['currency'] == data['currency']
         assert response_data['shop_category'] == shop_category.name
 
-    @pytestmark
-    def test_get_shop(self, user1, api_client, shop, shop1, login_user1):
+    def test_get_shop(self, user1, client, shop, shop1, login_user1):
         url = reverse_lazy('shops:shop-list')
-        response = api_client.get(url)
+        response = client.get(url)
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         response = login_user1.get(url)
         assert response.status_code == status.HTTP_200_OK

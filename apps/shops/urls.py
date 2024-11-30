@@ -22,7 +22,7 @@ urlpatterns = [
          name='shop-category-attachment-delete'),
     path('category/<int:image_id>/shop-file-upload', DownloadCategoryImageAPIView.as_view(),
          name='shop-category-attachment-download'),
-    path('shop/<int:pk>category', UpdateCategoryImageAPIView.as_view(), name='shop-category-update'),
+    path('shop/<int:pk>/category', UpdateCategoryImageAPIView.as_view(), name='shop-category-update'),
     path('shop/<int:shop_id>/category/<int:pk>', CategoryDestroyAPIView.as_view(), name='shop-category-destroy'),
     path('shop/<int:shop_id>/category-position/<int:pk>', CategoryPositionUpdateAPIView.as_view(),
          name='shop-category-position'),
@@ -36,6 +36,6 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('shop<int:shop_id>/product', ProductsListCreateAPIView.as_view(), name='shop-categories'),
+    path('shop<int:shop_id>/product', ProductsListCreateAPIView.as_view(), name='shop-products'),
 
 ]
