@@ -1,5 +1,5 @@
 import pytest
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from rest_framework import status
 
 from apps.shops.tests.conftest import shop, user1, country, currency, shop_category, login_user1
@@ -35,7 +35,7 @@ class TestShopView:
         }
         response = client.post(url, data)
         assert response.status_code == 201
-        response_data = response.json()
+        response_data = response.data
         assert response_data['name'] == data['name']
         assert response_data['phone_number'] == data['phone_number']
         assert shop.owner_id == user1.id

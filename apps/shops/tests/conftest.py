@@ -34,23 +34,16 @@ def user2():
 
 @pytest.fixture(scope='function')
 def login_user1(client, user1):
-    token = Token.objects.create(user=user1)
-    client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+    client = APIClient()
+    client.force_authenticate(user=user1)
     return client
-    # client = APIClient()
-    # client.force_authenticate(user=user1)
-    # return client
 
 
 @pytest.fixture(scope='function')
 def login_user2(client, user2):
-    token = Token.objects.create(user=user2)
-    client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+    client = APIClient()
+    client.force_authenticate(user=user2)
     return client
-
-    # client = APIClient()
-    # client.force_authenticate(user=user2)
-    # return client
 
 
 @pytest.fixture(scope='function')
