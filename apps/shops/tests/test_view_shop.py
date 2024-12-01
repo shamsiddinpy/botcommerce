@@ -13,7 +13,7 @@ class TestShopView:
         url = reverse_lazy('shops:shop-list')
         data = {
             "name": "Shop test",
-            "phone": "+8989898",
+            "phone": "+998908840720",
             "phone_number": "+998908840720",
             "status": "active",
             "lat": 7878700.12,
@@ -35,7 +35,7 @@ class TestShopView:
         }
         response = client.post(url, data)
         assert response.status_code == 201
-        response_data = response.data
+        response_data = response.json()
         assert response_data['name'] == data['name']
         assert response_data['phone_number'] == data['phone_number']
         assert shop.owner_id == user1.id

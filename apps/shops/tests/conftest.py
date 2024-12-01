@@ -1,5 +1,6 @@
 import pytest
 from rest_framework.test import APIClient
+from rest_framework.authtoken.models import Token
 
 from shops.models import Country, ShopCategory, Currency, Shop, Product, Category
 from users.models import User, Plan
@@ -32,17 +33,24 @@ def user2():
 
 
 @pytest.fixture(scope='function')
-def login_user1(user1):
-    api_client = APIClient()
-    api_client.force_authenticate(user=user1)
-    return api_client
+def login_user1(client, user1):
+    token = Token.objects.create(user=user1)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+    return client
+    # client = APIClient()
+    # client.force_authenticate(user=user1)
+    # return client
 
 
 @pytest.fixture(scope='function')
-def login_user2(user2):
-    api_client = APIClient()
-    api_client.force_authenticate(user=user2)
-    return api_client
+def login_user2(client, user2):
+    token = Token.objects.create(user=user2)
+    client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+    return client
+
+    # client = APIClient()
+    # client.force_authenticate(user=user2)
+    # return client
 
 
 @pytest.fixture(scope='function')
