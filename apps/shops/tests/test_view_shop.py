@@ -34,6 +34,7 @@ class TestShopView:
             "owner": user1.id,
         }
         response = client.post(url, data)
+        print(response.data)
         assert response.status_code == 201
         response_data = response.data
         assert response_data['name'] == data['name']
